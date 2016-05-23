@@ -1,6 +1,12 @@
 #include "HTTPRequestParser.h"
+#include <vector>
 #include "HTTPTokens.h"
-#include <cstring>
+#include <syslandscape/web/HTTPCookie.h>
+#include <syslandscape/util/StringUtil.h>
+
+using std::string;
+using std::vector;
+using syslandscape::util::StringUtil;
 
 namespace syslandscape {
 namespace web {
@@ -87,21 +93,45 @@ HTTPRequestParser::onHeadersComplete()
   _request->setVersionMajor(_parser.http_major);
   _request->setVersionMinor(_parser.http_minor);
   _request->setMethod(toMethod(_parser.method));
-  _request->setUrl(_url);  
+  _request->setUrl(_url);
 }
+
 void
 HTTPRequestParser::onHeaderName(const char *data, size_t size)
 {
   _hName.append(data, size);
 }
+
 void
 HTTPRequestParser::onHeaderValue(const char *data, size_t size)
 {    
   _hValue.append(data, size);
   _request->setHeader(_hName, _hValue);
+  if (_hName == HTTPTokens::HEADER_REQUEST_COOKIE)
+    {
+      parseCookieHeader(_hValue);
+    }
   _hName.clear();
   _hValue.clear();
 }
+
+void
+HTTPRequestParser::parseCookieHeader(const string &content)
+{
+  vector<string> cookieList = StringUtil::split(content, ";");
+  vector<HTTPCookie> cookies;
+  
+  for (auto value: cookieList)
+    {
+      auto cookiePair = StringUtil::split(value, "=");
+      /* Something is wrong, ignore */
+      if (cookiePair.size() != 2)
+        continue;
+      HTTPCookie *cookie = new HTTPCookie(StringUtil::trim(cookiePair[0]), StringUtil::trim(cookiePair[1]));
+      _request->addCookie(cookie);
+    }  
+}
+
 int
 HTTPRequestParser::onHeaderNameCB(http_parser *parser, const char *data, size_t size)
 {

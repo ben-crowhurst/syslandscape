@@ -12,6 +12,7 @@ class HTTPCookie
 public:
 
   HTTPCookie();
+  HTTPCookie(const std::string &, const std::string &);
 
   std::string getComment() const;
   void setComment(const std::string &);

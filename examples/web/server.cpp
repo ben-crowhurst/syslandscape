@@ -36,12 +36,16 @@ void MyHandler::handle(HTTPRequest &request, HTTPResponse &response)
   std::stringstream ss;
   ss << "<html><head><title>Page</title></head>";
   ss << "<body>";
+  ss << "<h1>" << request.getUrl() << "</h1>";
+  ss << "<h2>" << toString(request.getMethod()) << "</h2>";
+  
   for (auto header: request.headers())
     {
       ss << header.first << ": " << header.second << "<br>";
     }
   
   ss << "</body></html>";
+  
   response.setHeader("Content-Type", "text/html");
   response.setStatus(HTTPStatus::OK);
   response.setContent(ss.str());

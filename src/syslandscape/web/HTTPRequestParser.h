@@ -50,6 +50,7 @@ private:
   Status _status;
   
   void init();
+  void parseCookieHeader(const std::string &);
   void onBody(const char *, size_t);
   void onUrl(const char *, size_t);  
   void onHeaderName(const char *, size_t);  

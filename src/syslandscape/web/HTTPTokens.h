@@ -15,6 +15,8 @@ class HTTPTokens final
   static constexpr auto HEADER_HOST = "Host";
   static constexpr auto HEADER_CONTENT_LENGTH = "Content-Length";
   static constexpr auto HEADER_CONTENT_TYPE = "Content-Type";
+  static constexpr auto HEADER_REQUEST_COOKIE = "Cookie";
+  static constexpr auto HEADER_RESPONSE_COOKIE = "Set-Cookie";
   
   static constexpr char COLON = ':';
   static constexpr char SEMI_COLON = ';';  

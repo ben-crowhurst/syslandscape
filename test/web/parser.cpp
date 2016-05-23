@@ -45,6 +45,7 @@ TEST(HTTPRequestParser, GetMethod)
   ASSERT_EQ(1, request.getVersionMinor());
   ASSERT_EQ("/ads", request.getUrl());
 }
+
 TEST(HTTPRequestParser, PostMethod)
 {
   HTTPRequest request;
@@ -97,5 +98,42 @@ TEST(HTTPRequestParser, Continious)
   parser.reset();
   status = parse(parser, "GET /test HTTP/d");
   ASSERT_EQ(HTTPRequestParser::Status::ERROR, status);
+}
+
+TEST(HTTPRequestParser, Cookies)
+{
+  HTTPRequest request;
+  HTTPRequestParser parser(&request);  
+  HTTPRequestParser::Status status;
+
+  parser.setRequest(&request);
+  
+  status = parse(parser,
+                 "GET /ads HTTP/1.1\r\n"
+                 "Accept: test\r\n"
+                 "Cookie: name1=value1; name2=value2; wrong=ingore wrong1=ignore \r\n"
+                 "TestH: 1\r\n"
+                 "TestH: \r\n"
+                 "\r\n"
+                 );
+  
+  ASSERT_EQ(HTTPRequestParser::Status::SUCCESS, status);
+  ASSERT_EQ(request.getMethod(), HTTPMethod::GET);
+  ASSERT_TRUE(request.hasHeader("Accept"));
+  ASSERT_EQ(request.getHeader("Accept"), "test");
+  ASSERT_TRUE(request.hasHeader("TestH"));
+  ASSERT_EQ(request.getHeader("TestH"), "");
+  ASSERT_EQ(1, request.getVersionMajor());
+  ASSERT_EQ(1, request.getVersionMinor());
+  ASSERT_EQ("/ads", request.getUrl());
+
+  ASSERT_TRUE(request.hasCookie("name1"));
+  ASSERT_TRUE(request.hasCookie("name2"));
+  ASSERT_FALSE(request.hasCookie("wrong"));
+  ASSERT_FALSE(request.hasCookie("wrong1"));
+  ASSERT_EQ(request.getCookie("name1")->getValue(), "value1");
+  ASSERT_EQ(request.getCookie("name2")->getValue(), "value2");
+  
+  //  ASSERT_EQ(request.getCookieNames().size(), 2);
 }
 

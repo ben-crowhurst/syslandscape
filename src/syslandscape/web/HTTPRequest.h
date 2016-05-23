@@ -1,10 +1,11 @@
 #ifndef SYSLANDSCAPE_WEB_HTTPREQUEST
 #define SYSLANDSCAPE_WEB_HTTPREQUEST
 
-#include "HTTPMethod.h"
 
 #include <string>
 #include <map>
+#include "HTTPMethod.h"
+#include "HTTPCookie.h"
 
 namespace syslandscape {
 namespace web {
@@ -38,7 +39,14 @@ public:
 
   void setBody(const std::string &);
   std::string getBody() const;
+
+  HTTPCookie* getCookie(const std::string &);
+  void addCookie(HTTPCookie *);
+  std::vector<std::string> getCookieNames() const;
+  bool hasCookie(const std::string &) const;
+  
 private:
+
   HTTPRequest(const HTTPRequest &) = delete;
   void operator=(const HTTPRequest &) = delete;
 
@@ -48,7 +56,7 @@ private:
   int _httpVersionMajor;
   int _httpVersionMinor;
   std::map<std::string, std::string> _header;
-  
+  std::vector<HTTPCookie *> _cookies;
 }; /* class HTTPHeader  */
 
 inline int HTTPRequest::getVersionMajor() const

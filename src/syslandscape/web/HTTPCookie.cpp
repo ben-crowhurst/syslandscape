@@ -1,18 +1,17 @@
 #include "HTTPCookie.h"
-#include <syslandscape/util/StringUtil.h>
 #include <iostream>
 
-using std::cout;
-using std::endl;
 using std::string;
-using syslandscape::util::StringUtil;
-using size_type = std::string::size_type;
   
 namespace syslandscape {
 namespace web {
 
 HTTPCookie::HTTPCookie()
   : _version(1)
+{ }
+
+HTTPCookie::HTTPCookie(const string &name, const string &value)
+  : _name(name), _value(value), _version(1)
 { }
 
 bool

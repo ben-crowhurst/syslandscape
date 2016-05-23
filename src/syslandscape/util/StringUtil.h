@@ -11,7 +11,7 @@ namespace util {
 
 class StringUtil {
 public:
-  
+
   static std::vector<std::string> split(const std::string &, const std::string &);
   static bool isQuoted(const std::string &);
   static std::string trim(const std::string &);
