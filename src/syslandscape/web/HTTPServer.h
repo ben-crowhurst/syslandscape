@@ -3,8 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <boost/asio.hpp>
 #include "HTTPConnectionManager.h"
+#include "WebContext.h"
 
 namespace syslandscape {
 namespace web {
@@ -14,6 +16,8 @@ public:
   explicit HTTPServer(const std::string& ,const std::string&);
 
   void run();
+
+  void setWebContext(std::shared_ptr<WebContext>);
   
 protected:
   
@@ -31,6 +35,13 @@ private:
   HTTPHandler _handler;
   
 }; /* class HTTPServer  */
+
+inline void
+HTTPServer::setWebContext(std::shared_ptr<WebContext> wc)
+{
+  _handler.setWebContext(wc);
+}
+
 
 } /* namespace web */
 } /* namespace syslandscape */

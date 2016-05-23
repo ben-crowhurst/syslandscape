@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "WebPathSegment.h"
+#include "WebHandlerFactory.h"
 
 namespace syslandscape {
 namespace web {
@@ -19,12 +21,28 @@ public:
   std::string match(const std::string &);
 
   void add(const std::string &, const std::string &);
+
+  void setWebHandlerFactory(std::shared_ptr<WebHandlerFactory>);
+  std::shared_ptr<WebHandlerFactory> getWebHandlerFactory();
   
 private:
 
   WebPathSegment *_root;
-  
+  std::shared_ptr<WebHandlerFactory> _factory;
 };
+
+inline void
+WebContext::setWebHandlerFactory(std::shared_ptr<WebHandlerFactory> factory)
+{
+  _factory = factory;
+}
+
+inline std::shared_ptr<WebHandlerFactory>
+WebContext::getWebHandlerFactory()
+{
+  return _factory;
+}
+
 
 } /* web */
 } /* engine  */

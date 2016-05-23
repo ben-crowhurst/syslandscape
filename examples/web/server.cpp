@@ -7,7 +7,7 @@
 #include <syslandscape/web/HTTPStatus.h>
 #include <syslandscape/web/WebHandlerFactory.h>
 #include <syslandscape/web/WebHandler.h>
-#include <syslandscape/web/WebContex.h>
+#include <syslandscape/web/WebContext.h>
 
 using std::string;
 using syslandscape::web::HTTPServer;
@@ -27,6 +27,10 @@ public:
 private:
 };
 
+MyHandler::MyHandler()
+{
+}
+
 void MyHandler::handle(HTTPRequest &request, HTTPResponse &response)
 {
   std::stringstream ss;
@@ -34,7 +38,7 @@ void MyHandler::handle(HTTPRequest &request, HTTPResponse &response)
   ss << "<body>";
   for (auto header: request.headers())
     {
-      ss << header.first << ": " << header.second << "br>";
+      ss << header.first << ": " << header.second << "<br>";
     }
   
   ss << "</body></html>";
@@ -60,11 +64,18 @@ std::unique_ptr<WebHandler> MyHandlerFactory::getHandler(const string &, HTTPReq
 
 int main()
 {
-
+  auto wc = std::make_shared<WebContext>();
+  wc->add("/", "home");
+  wc->add("/index.html", "home");
+  wc->setWebHandlerFactory(std::make_shared<MyHandlerFactory>());  
+  
   std::cout << "RUN" << std::endl;
   try {
     HTTPServer s("0.0.0.0", "8080");
+    s.setWebContext(wc);
     s.run();
+
+    
   }
   catch (std::exception& e)
   {

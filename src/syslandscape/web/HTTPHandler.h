@@ -1,8 +1,10 @@
 #ifndef SYSLANDSCAPE_WEB_HTTPHANDLER
 #define SYSLANDSCAPE_WEB_HTTPHANDLER
 
+#include <memory>
 #include "HTTPRequest.h"
 #include "HTTPResponse.h"
+#include "WebContext.h"
 
 namespace syslandscape {
 namespace web {
@@ -15,10 +17,19 @@ public:
 
   explicit HTTPHandler();
 
-  void handle(const HTTPRequest &, HTTPResponse &);
- 
+  void handle(HTTPRequest &, HTTPResponse &);
+
+  void setWebContext(std::shared_ptr<WebContext>);
+
 private:
+  std::shared_ptr<WebContext> _webContext;
 };
+
+inline void
+HTTPHandler::setWebContext(std::shared_ptr<WebContext> wc)
+{
+  _webContext = wc;
+}
 
 } /* namespace web */
 } /* namespace syslandscape */

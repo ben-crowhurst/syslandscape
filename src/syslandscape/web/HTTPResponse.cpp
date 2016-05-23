@@ -142,7 +142,6 @@ const char crlf[] = { '\r', '\n' };
 
 string HTTPResponse::getPage()
 {
-  cout << "Generating page " << endl;
   stringstream ss;
   _status = HTTPStatus::OK;
   
@@ -157,8 +156,6 @@ string HTTPResponse::getPage()
   ss <<  '\n' << '\r';
   ss << _content;
   ss <<  '\n' << '\r';
-  
-  cout << ss.str() << endl;
   
   return ss.str();
 }
