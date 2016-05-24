@@ -1,7 +1,8 @@
 set(SOURCES
   TemplateException.cpp
   Data.cpp
-  Token.cpp TokenText.cpp TokenVariable.cpp TokenEnd.cpp TokenIf.cpp TokenFor.cpp
+  Token.cpp TokenText.cpp TokenVariable.cpp TokenEnd.cpp TokenIf.cpp
+  TokenFor.cpp TokenInclude.cpp 
   Template.cpp
   Storage.cpp  DirectoryStorage.cpp StringStorage.cpp
   Engine.cpp

@@ -13,7 +13,7 @@ class StringStorage : public Storage
 {
 public:
 
-  StringStorage(const std::string &);
+  StringStorage();
   virtual ~StringStorage();
 
   std::chrono::system_clock::time_point
@@ -21,9 +21,13 @@ public:
   
   std::string
   getTemplate(const std::string &) override;
+
+  void
+  putTemplate(const std::string &, const std::string &);
   
 private:
-
+  
+  std::map<std::string, std::string> _storage;
   
 }; // class Storage
 

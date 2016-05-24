@@ -7,13 +7,14 @@ namespace syslandscape {
 namespace tmpl {
 
 enum class TokenType {
-    NONE = 0,
+  NONE = 0,
     TEXT,
     VAR,
     IF,
     ENDIF,    
     FOR,
-    ENDFOR
+    ENDFOR,
+    INCLUDE
 };
 
 } /* namespace tmpl */

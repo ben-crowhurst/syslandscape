@@ -5,6 +5,7 @@
 #include "TokenText.h"
 #include "TokenVariable.h"
 #include "TokenEnd.h"
+#include "TokenInclude.h"
 #include "TemplateException.h"
 #include <syslandscape/util/StringUtil.h>
 
@@ -110,6 +111,7 @@ vector<shared_ptr<Token>> Template::tokenize(const string &content) const
             string expression = StringUtil::trim(source.substr(1, pos - 2));
 
             source = source.substr(pos + 1);
+            
             if (StringUtil::startsWith(expression, "for "))
               {
                 tokenList.push_back(make_shared<TokenFor>(expression));
@@ -118,6 +120,10 @@ vector<shared_ptr<Token>> Template::tokenize(const string &content) const
               {
                 tokenList.push_back(make_shared<TokenIf>(expression));
               }
+            else if (StringUtil::startsWith(expression, "include "))
+              {
+                tokenList.push_back(make_shared<TokenInclude>(_engine, expression));
+              }            
             else
               {
                 tokenList.push_back(make_shared<TokenEnd>(StringUtil::trim(expression)  == "endfor" ? TokenType::ENDFOR : TokenType::ENDIF));

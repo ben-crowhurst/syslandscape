@@ -11,18 +11,26 @@
 namespace syslandscape {
 namespace tmpl {
 
+class Engine;
+
 class TokenInclude : public Token
 {
 public:
-  TokenInclude(const std::string &);
+  
+  TokenInclude(Engine *, const std::string &);
+  
   virtual ~TokenInclude();
   
-  void process(std::ostream &, Data &) const override;
-  bool isTrue(Data &) const;
+  void
+  process(std::ostream &, Data &) const override;
 
 private:
-  std::string _expression;
-  std::vector<std::string> _elements;
+
+  Engine *_engine;
+  std::string _templatePath;
+  
+  void parse();
+  
 };
 
 } /* namespace tmpl */

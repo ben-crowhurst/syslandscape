@@ -45,7 +45,5 @@ string DirectoryStorage::getTemplate(const string &path) {
 }
 
 
-
-
 } /* namespace tmpl */
 } /* namespace syslandscape  */
