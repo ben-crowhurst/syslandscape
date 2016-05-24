@@ -9,7 +9,7 @@
 namespace syslandscape {
 namespace util {
 
-class StringUtil {
+class StringUtil final {
 public:
 
   static std::vector<std::string> split(const std::string &, const std::string &);

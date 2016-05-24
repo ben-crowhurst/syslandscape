@@ -25,11 +25,13 @@ find_package(Boost 1.58.0 COMPONENTS system filesystem REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 include_directories(${Boost_INCLUDE_DIR})
 
+set(SYSLANDSCAPE syslandscape)
 set(SYSLANDSCAPE_UTIL syslandscape-util)
 set(SYSLANDSCAPE_TMPL syslandscape-tmpl)
 set(SYSLANDSCAPE_WEB syslandscape-web)
 
 include_directories(src)
+add_subdirectory(src/syslandscape)
 add_subdirectory(src/syslandscape/util)
 add_subdirectory(src/syslandscape/tmpl)
 add_subdirectory(src/syslandscape/web)

@@ -33,7 +33,7 @@ time_point DirectoryStorage::getModificationTime(const string &) {
 string DirectoryStorage::getTemplate(const string &path) {
   fs::path templatePath = _directory;
   templatePath /= path;
-  
+
   if (!fs::is_regular_file(templatePath))
     throw TemplateException("Template " + path + " not found.");
 
