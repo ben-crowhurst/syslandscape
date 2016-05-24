@@ -17,7 +17,7 @@ using std::cout;
 using std::endl;
 namespace fs = boost::filesystem;
 
-fs::path templateDirectory = "test/tmpl/";
+fs::path templateDirectory = "";
 
 TEST(DirctoryStorage, TemplateException)
 {
@@ -35,7 +35,7 @@ TEST(DirctoryStorage, bla1)
   model["city"].append("Montana");
   model["city"].append("Sofia");
     
-  ASSERT_EQ("1. Montana 2. Sofia \n", engine.process("/document/document-1.html", model));
+  ASSERT_EQ("1. Montana 2. Sofia \n", engine.process("document/document-1.html", model));
 }
 
 class StringStorageTest : public testing::Test {
