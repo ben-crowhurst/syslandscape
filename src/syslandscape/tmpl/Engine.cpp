@@ -36,7 +36,7 @@ string Engine::process(const string &path, Data &model)
 void Engine::loadTemplate(const string &path)
 {
   string content = _storage->getTemplate(path);
-  Template *tmpl = new Template(content);
+  Template *tmpl = new Template(this, content);
   _template[path] = tmpl;
 }
 

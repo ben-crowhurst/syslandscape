@@ -12,14 +12,18 @@
 namespace syslandscape {
 namespace tmpl {
 
+class Engine;
+
 class Template
 {
 public:
-  Template(const std::string &);
+  Template(Engine *, const std::string &);
   
   std::string process(Data &) const;
   
 private:
+  
+  Engine * _engine;
   std::vector<std::shared_ptr<Token>> _tokenList;
   
   Template() = delete;

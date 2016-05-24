@@ -20,7 +20,8 @@ using size_type = std::string::size_type;
 namespace syslandscape {
 namespace tmpl {
 
-Template::Template(const string &source)
+Template::Template(Engine *engine, const string &source)
+  : _engine(engine)
 {
   vector<shared_ptr<Token>> tokens = tokenize(source);  
   parse(tokens, _tokenList, TokenType::NONE);
@@ -105,8 +106,7 @@ vector<shared_ptr<Token>> Template::tokenize(const string &content) const
       {
         pos = source.find("}");
         if (string::npos != pos)
-          {
-            
+          {            
             string expression = StringUtil::trim(source.substr(1, pos - 2));
 
             source = source.substr(pos + 1);

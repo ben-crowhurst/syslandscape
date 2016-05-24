@@ -3,7 +3,7 @@ set(SOURCES
   Data.cpp
   Token.cpp TokenText.cpp TokenVariable.cpp TokenEnd.cpp TokenIf.cpp TokenFor.cpp
   Template.cpp
-  Storage.cpp  DirectoryStorage.cpp
+  Storage.cpp  DirectoryStorage.cpp StringStorage.cpp
   Engine.cpp
   )
 

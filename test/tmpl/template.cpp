@@ -30,7 +30,7 @@ TEST(Template, t1)
   model["places"].append("Sofia");
   model["places"].append("Montana");
   
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "<h3>Locations</h3><ul><li>Sofia</li><li>Montana</li></ul>");
 }
 TEST(Template, t2)
@@ -38,7 +38,7 @@ TEST(Template, t2)
   string text = "I'm from {$place}!";
   Data model;
   model["place"] = "Montana";
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "I'm from Montana!");
 }
 TEST(Template, t3)
@@ -54,7 +54,7 @@ TEST(Template, t3)
   model["person"]["friends"].append(betty);
   model["person"]["friends"].append(bob);
 
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "1. Betty 2. Bob ");
 }
 TEST(Template, t4)
@@ -64,7 +64,7 @@ TEST(Template, t4)
   model["person"]["name"] = "Bob";
   model["person"]["occupation"] = "Plumber";
 
-  Template t(text);
+  Template t(nullptr,text);
   ASSERT_EQ(t.process(model), "Full name: Robert");  
 }
 TEST(Template, t5)
@@ -76,7 +76,7 @@ TEST(Template, t5)
   model["item"] = "aaa";
   model["thing"] = "bbb";
  
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "aaa\nbbb");  
 }
 TEST(Template, t6)
@@ -87,7 +87,7 @@ TEST(Template, t6)
   model["item"] = "aaa";
   //model["thing"] = "";
 
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "");  
 }
 TEST(Template, t7)
@@ -99,7 +99,7 @@ TEST(Template, t7)
   model["things"].append("a");
   model["things"].append("b");
 
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "0a0b1a1b");
 }
 TEST(Template, t8)
@@ -108,7 +108,7 @@ TEST(Template, t8)
   Data model;
   model["item"] = "foo";
   
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "foo");
 }
 TEST(Template, t9)
@@ -116,7 +116,7 @@ TEST(Template, t9)
   string text = "{% if item %}{$item}{% endif %}";
   Data model;
   
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "");
 }
 TEST(Template, t10)
@@ -125,7 +125,7 @@ TEST(Template, t10)
   Data model;
   model["foo"] = "---";
   
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "aaa---bbb");
 }
 TEST(Template, t11)
@@ -133,6 +133,6 @@ TEST(Template, t11)
   string text = "foo";
   Data model;
 
-  Template t(text);
+  Template t(nullptr, text);
   ASSERT_EQ(t.process(model), "foo");
 }
