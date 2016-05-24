@@ -83,10 +83,10 @@ private:
   std::string _name;
   std::string _path;
   std::string _portList;
-  bool _secure;
+  bool _secure = false;
   std::string _value;
-  int _version;
-  bool _httpOnly;
+  int _version = 1;
+  bool _httpOnly = false;
   std::string _priority;
   
 };

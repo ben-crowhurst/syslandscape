@@ -5,6 +5,7 @@
 #include <syslandscape/web/HTTPRequest.h>
 #include <syslandscape/web/HTTPResponse.h>
 #include <syslandscape/web/HTTPStatus.h>
+#include <syslandscape/web/HTTPCookie.h>
 #include <syslandscape/web/WebHandlerFactory.h>
 #include <syslandscape/web/WebHandler.h>
 #include <syslandscape/web/WebContext.h>
@@ -14,6 +15,7 @@ using syslandscape::web::HTTPServer;
 using syslandscape::web::HTTPRequest;
 using syslandscape::web::HTTPResponse;
 using syslandscape::web::HTTPStatus;
+using syslandscape::web::HTTPCookie;
 using syslandscape::web::WebContext;
 using syslandscape::web::WebHandler;
 using syslandscape::web::WebHandlerFactory;
@@ -45,7 +47,13 @@ void MyHandler::handle(HTTPRequest &request, HTTPResponse &response)
     }
   
   ss << "</body></html>";
+
+  HTTPCookie* c = new HTTPCookie();
+  c->setName("SYSLSESSION");
+  c->setValue("whatever");
+  c->setHttpOnly(true);
   
+  response.addCookie(c);
   response.setHeader("Content-Type", "text/html");
   response.setStatus(HTTPStatus::OK);
   response.setContent(ss.str());

@@ -6,6 +6,7 @@
 #include <vector>
 #include <boost/asio.hpp>
 #include "HTTPStatus.h"
+#include "HTTPCookie.h"
 
 namespace syslandscape {
 namespace web {
@@ -13,6 +14,8 @@ namespace web {
 class HTTPResponse {
 public:
 
+  ~HTTPResponse();
+  
   void setStatus(HTTPStatus);
   HTTPStatus getStatus() const;
   void setContent(const std::string &);
@@ -21,13 +24,16 @@ public:
   
   std::vector<boost::asio::const_buffer> to_buffers();
   std::string getPage();
+
+  void addCookie(HTTPCookie *);
   
   static HTTPResponse stock(HTTPStatus);
   static std::string toString(HTTPStatus status);
-
+  
 private:
 
   std::map<std::string, std::string> _header;
+  std::vector<HTTPCookie *> _cookies;
   std::string _content;
   HTTPStatus _status;
 }; /* class HTTPHeader  */

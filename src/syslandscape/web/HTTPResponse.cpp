@@ -11,7 +11,20 @@ using std::endl;
 namespace syslandscape {
 namespace web {
 
-void HTTPResponse::setHeader(const string &name, const string &value)
+HTTPResponse::~HTTPResponse()
+{
+  for (auto c: _cookies) delete c;
+  _cookies.clear();
+}
+
+void
+HTTPResponse::addCookie(HTTPCookie *c)
+{
+  _cookies.push_back(c);
+}
+
+void
+HTTPResponse::setHeader(const string &name, const string &value)
 {
   _header[name] = value;
 }
@@ -148,11 +161,15 @@ string HTTPResponse::getPage()
   ss << toString(_status);
   _header["Content-Length"] = std::to_string(_content.size() + 1);
   for (auto pair: _header)
-  {
-    std::string name = pair.first;
-    std::string value = pair.second;
-    ss << name << ": " << value << '\n' << '\r';
-  }
+    {
+      std::string name = pair.first;
+      std::string value = pair.second;
+      ss << name << ": " << value << '\n' << '\r';
+    }
+  for (auto c: _cookies)
+    {
+      ss << "Set-Cookie: " << c->toString() << '\n' << '\r';
+    }
   ss <<  '\n' << '\r';
   ss << _content;
   ss <<  '\n' << '\r';
