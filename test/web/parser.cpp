@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <ctime>
 #include <gtest/gtest.h>
+#include <syslandscape/web/HTTPCookie.h>
 #include <syslandscape/web/HTTPTokens.h>
 #include <syslandscape/web/HTTPRequest.h>
 #include <syslandscape/web/HTTPRequestParser.h>
@@ -12,6 +15,7 @@ using syslandscape::web::HTTPMethod;
 using syslandscape::web::HTTPTokens;
 using syslandscape::web::HTTPRequest;
 using syslandscape::web::HTTPRequestParser;
+using syslandscape::web::HTTPCookie;
 
 HTTPRequestParser::Status parse(HTTPRequestParser &parser, const string &content)
 {
@@ -137,3 +141,17 @@ TEST(HTTPRequestParser, Cookies)
   //  ASSERT_EQ(request.getCookieNames().size(), 2);
 }
 
+TEST(HTTPRequestParser, C)
+{
+  HTTPCookie c;
+  // expires=Mon, 06 Jun 2016 18:26:21 -0000;
+  using namespace std::chrono;
+  time_point<system_clock> sc = system_clock::now();
+  seconds secs = duration_cast<seconds>(sc.time_since_epoch());
+  std::time_t t = secs.count();
+  cout << std::ctime(&t) << endl;
+
+  std::stringstream ss;
+  ss << std::put_time(std::localtime(&t), "%Y-%m-%d");
+  cout << ss.str() << endl;
+}
