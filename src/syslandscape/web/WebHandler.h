@@ -12,6 +12,8 @@ class WebHandler
 {
 public:
 
+  virtual ~WebHandler();
+  
   virtual void handle(HTTPRequest &, HTTPResponse &) = 0;
 
 };

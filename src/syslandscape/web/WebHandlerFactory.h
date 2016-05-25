@@ -13,6 +13,8 @@ class WebHandlerFactory
 {
 public:
 
+  virtual ~WebHandlerFactory();
+  
   virtual std::unique_ptr<WebHandler> getHandler(const std::string &, HTTPRequest &) = 0;
   
 };

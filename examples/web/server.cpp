@@ -2,42 +2,30 @@
 #include <string>
 #include <memory>
 #include <syslandscape/web/HTTPServer.h>
-#include <syslandscape/web/HTTPRequest.h>
-#include <syslandscape/web/HTTPResponse.h>
-#include <syslandscape/web/HTTPStatus.h>
-#include <syslandscape/web/HTTPCookie.h>
-#include <syslandscape/web/WebHandlerFactory.h>
-#include <syslandscape/web/WebHandler.h>
 #include <syslandscape/web/WebContext.h>
+#include <syslandscape/tmpl/Engine.h>
+#include <syslandscape/tmpl/DirectoryStorage.h>
+
 #include "AboutHandler.h"
 #include "HomeHandler.h"
+#include "HandlerFactory.h"
 
 using std::string;
 using syslandscape::web::HTTPServer;
-using syslandscape::web::HTTPRequest;
-using syslandscape::web::HTTPResponse;
-using syslandscape::web::HTTPStatus;
-using syslandscape::web::HTTPCookie;
 using syslandscape::web::WebContext;
-using syslandscape::web::WebHandler;
-using syslandscape::web::WebHandlerFactory;
+using syslandscape::tmpl::Engine;
+using syslandscape::tmpl::Storage;
+using syslandscape::tmpl::DirectoryStorage;
 using namespace syslandscape::example::web;
 using namespace std;
 
-class MyHandlerFactory : public WebHandlerFactory
+std::shared_ptr<Engine> setupTemplateEngine()
 {
-public:
-  
-  std::unique_ptr<WebHandler> getHandler(const string &, HTTPRequest &) override;
+  std::shared_ptr<Engine> engine = std::make_shared<Engine>();
+  std::shared_ptr<Storage> storage = std::make_shared<DirectoryStorage>("www");
+  engine->setStorage(storage);
 
-private:
-};
-
-std::unique_ptr<WebHandler> MyHandlerFactory::getHandler(const string &handlerId, HTTPRequest &)
-{
-  cout << "Handler ID" << handlerId << endl;
-  if ("about" == handlerId) return std::make_unique<AboutHandler>();
-  return std::make_unique<HomeHandler>();
+  return engine;
 }
 
 int main()
@@ -46,8 +34,8 @@ int main()
   wc->add("/", "home");
   wc->add("/*", "home");  
   wc->add("/index.html", "home");
-  wc->add("/about.html", "about");  
-  wc->setWebHandlerFactory(std::make_shared<MyHandlerFactory>());  
+  wc->add("/about.html", "about");
+  wc->setWebHandlerFactory(std::make_shared<HandlerFactory>(setupTemplateEngine()));
   
   std::cout << "RUN" << std::endl;
   try {

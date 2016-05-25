@@ -1,38 +1,32 @@
 #include "AboutHandler.h"
 
 #include <sstream>
+#include <iostream>
 
 using namespace syslandscape::web;
+using syslandscape::tmpl::Data;
+using syslandscape::tmpl::Engine;
 
 namespace syslandscape {
 namespace example {
 namespace web {
 
-void
-AboutHandler::handle(HTTPRequest &request, HTTPResponse &response)
-{
-  std::stringstream ss;
-  ss << "<html><head><title>About</title></head>";
-  ss << "<body>";
-  ss << "<h1>" << request.getUrl() << "</h1>";
-  ss << "<h2>" << toString(request.getMethod()) << "</h2>";
-  
-  for (auto header: request.headers())
-    {
-      ss << header.first << ": " << header.second << "<br>";
-    }
-  
-  ss << "</body></html>";
+AboutHandler::AboutHandler(std::shared_ptr<Engine> engine)
+  : _engine(engine)
+{ }
 
-  HTTPCookie* c = new HTTPCookie();
-  c->setName("SYSLSESSION");
-  c->setValue("whatever");
-  c->setHttpOnly(true);
-  
-  response.addCookie(c);
+AboutHandler::~AboutHandler()
+{ }
+
+void
+AboutHandler::handle(HTTPRequest &, HTTPResponse &response)
+{
+  Data model;
+  model["title"] = "About";
+  model["greeting"] = "Hello World";
+  response.setContent(_engine->process("/about.html", model));
   response.setHeader("Content-Type", "text/html");
   response.setStatus(HTTPStatus::OK);
-  response.setContent(ss.str());    
 }
 
 } /* namespace web */

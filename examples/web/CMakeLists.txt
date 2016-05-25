@@ -1,6 +1,7 @@
 set(SOURCES
   AboutHandler.cpp
   HomeHandler.cpp
+  HandlerFactory.cpp
   )
 
 SET(EXAMPLE_NAME web-server)
