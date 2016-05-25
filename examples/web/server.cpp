@@ -9,6 +9,8 @@
 #include <syslandscape/web/WebHandlerFactory.h>
 #include <syslandscape/web/WebHandler.h>
 #include <syslandscape/web/WebContext.h>
+#include "AboutHandler.h"
+#include "HomeHandler.h"
 
 using std::string;
 using syslandscape::web::HTTPServer;
@@ -19,45 +21,8 @@ using syslandscape::web::HTTPCookie;
 using syslandscape::web::WebContext;
 using syslandscape::web::WebHandler;
 using syslandscape::web::WebHandlerFactory;
-
-class MyHandler : public WebHandler
-{
-public:
-  MyHandler();
-
-  void handle(HTTPRequest &, HTTPResponse &) override;
-private:
-};
-
-MyHandler::MyHandler()
-{
-}
-
-void MyHandler::handle(HTTPRequest &request, HTTPResponse &response)
-{
-  std::stringstream ss;
-  ss << "<html><head><title>Page</title></head>";
-  ss << "<body>";
-  ss << "<h1>" << request.getUrl() << "</h1>";
-  ss << "<h2>" << toString(request.getMethod()) << "</h2>";
-  
-  for (auto header: request.headers())
-    {
-      ss << header.first << ": " << header.second << "<br>";
-    }
-  
-  ss << "</body></html>";
-
-  HTTPCookie* c = new HTTPCookie();
-  c->setName("SYSLSESSION");
-  c->setValue("whatever");
-  c->setHttpOnly(true);
-  
-  response.addCookie(c);
-  response.setHeader("Content-Type", "text/html");
-  response.setStatus(HTTPStatus::OK);
-  response.setContent(ss.str());
-}
+using namespace syslandscape::example::web;
+using namespace std;
 
 class MyHandlerFactory : public WebHandlerFactory
 {
@@ -68,26 +33,27 @@ public:
 private:
 };
 
-std::unique_ptr<WebHandler> MyHandlerFactory::getHandler(const string &, HTTPRequest &)
+std::unique_ptr<WebHandler> MyHandlerFactory::getHandler(const string &handlerId, HTTPRequest &)
 {
-  return std::make_unique<MyHandler>();
+  cout << "Handler ID" << handlerId << endl;
+  if ("about" == handlerId) return std::make_unique<AboutHandler>();
+  return std::make_unique<HomeHandler>();
 }
-
 
 int main()
 {
   auto wc = std::make_shared<WebContext>();
   wc->add("/", "home");
+  wc->add("/*", "home");  
   wc->add("/index.html", "home");
+  wc->add("/about.html", "about");  
   wc->setWebHandlerFactory(std::make_shared<MyHandlerFactory>());  
   
   std::cout << "RUN" << std::endl;
   try {
     HTTPServer s("0.0.0.0", "8080");
     s.setWebContext(wc);
-    s.run();
-
-    
+    s.run();   
   }
   catch (std::exception& e)
   {

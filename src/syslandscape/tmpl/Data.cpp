@@ -8,7 +8,6 @@ using std::vector;
 namespace syslandscape {
 namespace tmpl {
 
-
 Data::Data() : _type(DataType::NONE), _object(nullptr), _list(nullptr), _string(nullptr), _int(nullptr) { }
 Data::Data(DataType type) : _type(type),  _object(nullptr), _list(nullptr), _string(nullptr), _int(nullptr) {
   initValue(type);
