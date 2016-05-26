@@ -21,31 +21,23 @@ void
 HomeHandler::handle(HTTPRequest &request, HTTPResponse &response)
 {
   Data model;
+  model["title"] = "Home";
   model["url"] = request.getUrl();
   model["method"] = toString(request.getMethod());
   
-  std::stringstream ss;
-  ss << "<html><head><title>Page</title></head>";
-  ss << "<body>";
-  ss << "<h1>" << request.getUrl() << "</h1>";
-  ss << "<h2>" << toString(request.getMethod()) << "</h2>";
-
   for (auto header: request.headers())
     {
-      ss << header.first << ": " << header.second << "<br>";
+      Data h;
+      h["name"] = header.first;
+      h["value"] = header.second;
+      model["headers"].append(h);
     }
   
-  ss << "</body></html>";
-
-  HTTPCookie* c = new HTTPCookie();
-  c->setName("SYSLSESSION");
-  c->setValue("whatever");
-  c->setHttpOnly(true);
   
-  response.addCookie(c);
   response.setHeader("Content-Type", "text/html");
   response.setStatus(HTTPStatus::OK);
-  response.setContent(ss.str());  
+  response.setContent(_engine->process("/index.html", model));
+
 }
 
 } /* namespace web */

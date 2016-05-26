@@ -1,0 +1,19 @@
+<html>
+  <head>
+    {%include /head.html%}
+  </head>
+  <body>
+    <h3>URL: {$url}</h3>
+    <h3>Method: {$method}</h3>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        {% for header in headers %}
+        <tr><td>{$header.name}</td><td>{$header.value}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
