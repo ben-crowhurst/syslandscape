@@ -32,7 +32,7 @@ int main()
 {
   auto wc = std::make_shared<WebContext>();
   wc->add("/", "home");
-  wc->add("/*", "home");  
+  //  wc->add("/*", "home");  
   wc->add("/index.html", "home");
   wc->add("/about.html", "about");
   wc->setWebHandlerFactory(std::make_shared<HandlerFactory>(setupTemplateEngine()));

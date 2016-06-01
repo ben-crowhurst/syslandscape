@@ -15,6 +15,9 @@ set(SOURCES
   WebContext.cpp
   WebPathSegment.cpp
   http_parser.c
+
+  Service.cpp
+  Settings.cpp
   )
 
 add_library(${SYSLANDSCAPE_WEB} SHARED ${SOURCES})

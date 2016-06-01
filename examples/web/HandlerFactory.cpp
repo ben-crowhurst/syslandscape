@@ -3,6 +3,8 @@
 #include "AboutHandler.h"
 #include "HomeHandler.h"
 
+#include <iostream>
+
 using std::string;
 using std::unique_ptr;
 using syslandscape::web::WebHandler;
@@ -20,8 +22,9 @@ HandlerFactory::HandlerFactory(std::shared_ptr<Engine> engine)
 }
 
 unique_ptr<WebHandler>
-HandlerFactory::getHandler(const string &handlerId, HTTPRequest &)
+HandlerFactory::getHandler(const string &handlerId, HTTPRequest &request)
 {
+  std::cout << "Request " << handlerId << ": " << request.getUrl() << std::endl; 
   if ("about" == handlerId) return std::make_unique<AboutHandler>(_engine);
   
   return std::make_unique<HomeHandler>(_engine);
