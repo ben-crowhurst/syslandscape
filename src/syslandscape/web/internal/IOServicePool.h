@@ -15,24 +15,24 @@ public:
 
   explicit IOServicePool(std::size_t);
   
-  IOServicePool(const IOServicePool&) = delete;
+  IOServicePool(const IOServicePool &) = delete;
   
-  IOServicePool& operator=(const IOServicePool&) = delete;
+  IOServicePool& operator=(const IOServicePool &) = delete;
 
   void run();
   
-  void terminate();
+  void stop();
 
   boost::asio::io_service& get();
 
 private:
 
-  typedef std::shared_ptr<boost::asio::io_service> io_service_ptr;
-  typedef std::shared_ptr<boost::asio::io_service::work> work_ptr;
+  typedef std::shared_ptr<boost::asio::io_service> IOServicePtr;
+  typedef std::shared_ptr<boost::asio::io_service::work> IOWorkPtr;
   
-  std::vector<io_service_ptr> _io_services;
+  std::vector<IOServicePtr> _ioServices;
   
-  std::vector<work_ptr> _work;
+  std::vector<IOWorkPtr> _ioWork;
   
   std::size_t _next = 0;
   

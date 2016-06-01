@@ -2,20 +2,17 @@
 #define SYSLANDSCAPE_WEB_WEBEXCEPTION
 
 #include <string>
-#include <stdexcept>
+#include "../Exception.h"
 
 namespace syslandscape {
 namespace web {
 
 
-class WebException : public std::exception
+class WebException : public syslandscape::Exception
 {
 public:
   WebException(const std::string &);
   virtual ~WebException() throw();
-  virtual const char* what() const throw();
-private:
-  std::string _reason;
 };
 
 } /* namespace web */

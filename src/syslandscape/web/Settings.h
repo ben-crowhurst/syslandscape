@@ -18,18 +18,48 @@ public:
   
   std::string address() const;
 
-  void reuse_address(bool);
+  void reuseAddress(bool);
 
-  bool reuse_address() const;
+  bool reuseAddress() const;
+
+  bool noDelay() const;
+
+  void noDelay(bool);
+
+  void workerThreads(uint16_t);
+
+  uint16_t workerThreads() const;
+  
+  void maxPendingConnections(uint16_t);
+  
+  uint16_t maxPendingConnections() const;
+  
+  void receiveBufferSize(uint16_t);
+
+  uint16_t receiveBufferSize() const;
+  
+  void sendBufferSize(uint16_t);
+
+  uint16_t sendBufferSize() const;
   
 private:
 
   uint16_t _port = 8080;
   
-  std::string _address = "";
+  std::string _address = "127.0.0.1";
 
-  bool _reuse_address = true;
+  bool _reuseAddress = true;
+
+  /** Set tcp::no_delay option to socket. */
+  bool _noDelay = true;
+
+  uint16_t _workerThreads = 10;
   
+  uint16_t _maxPendingConnections = 30;
+  
+  uint16_t _receiveBufferSize = 8192;
+
+  uint16_t _sendBufferSize = 8192;
 };
 
 } /* web */
