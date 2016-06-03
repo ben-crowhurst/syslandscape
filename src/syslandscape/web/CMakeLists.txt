@@ -1,19 +1,5 @@
 set(SOURCES
-  HTTPMethod.cpp HTTPStatus.cpp
-  HTTPRequestParser.cpp
-  HTTPHandler.cpp
-  HTTPResponse.cpp
-  HTTPRequest.cpp
-  HTTPConnection.cpp
-  HTTPConnectionManager.cpp
-  HTTPServer.cpp
-  HTTPTokens.cpp
-  HTTPCookie.cpp
   WebException.cpp
-  WebHandler.cpp
-  WebHandlerFactory.cpp
-  WebContext.cpp
-  WebPathSegment.cpp
   http_parser.c
 
   Types.cpp

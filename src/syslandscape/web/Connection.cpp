@@ -38,8 +38,7 @@ void Connection::stop()
 void Connection::start()
 {
   _connectionManager.add(shared_from_this());
-  //  _requestUtil.read([this] () { handleRequestStatus(); })
-  _requestUtil.read();
+  _requestUtil.read([this] (Status status, const std::string &error) { onRequest(status, error); });
 }
 
 void Connection::setTimeout(long seconds)
@@ -52,6 +51,23 @@ void Connection::setTimeout(long seconds)
           stop();
         }
     });
+}
+
+void Connection::onRequest(Status status, const std::string &error)
+{
+  if (status != Status::OK)
+    {
+      std::cout << "Error reading request: " << error << std::endl;
+      return;
+    }
+  std::cout << "-----------------------" << std::endl;
+  std::cout << toString(_request->method()) << std::endl;
+  std::cout << _request->uri() << std::endl;
+  for (auto header: _request->headers().get())
+    {
+      std::cout << "\t" <<  header.first << ":" << header.second << std::endl;
+    }
+  std::cout << _request->body() << std::endl;
 }
 
 void Connection::handleRequestStatus()

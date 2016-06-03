@@ -27,7 +27,8 @@ public:
   void reset();
 
   void read();
-  
+
+  void read(const std::function<void (Status, const std::string &)>);
 private:
 
   std::shared_ptr<Settings> _settings;
@@ -42,10 +43,28 @@ private:
   
   http_parser _parser;
 
+  std::string _headerName;
+
+  boost::asio::streambuf _buffer;
+
+  std::function<void (Status, const std::string &)> _callback;
+    
   void onData(boost::system::error_code, size_t);
-  
+
+  void onBody(const char *, size_t);
+  static int onBodyCB(http_parser *, const char *, size_t);
+  void onMessageComplete();
+  static int onMessageCompleteCB(http_parser *);
+  void onHeadersComplete();
+  static int onHeadersCompleteCB(http_parser *);
+  void onHeaderValue(const char *, size_t);
+  static int onHeaderValueCB(http_parser *, const char *, size_t);  
+  void onHeaderName(const char *, size_t);
+  static int onHeaderNameCB(http_parser *, const char *, size_t);  
   void onUrl(const char *, size_t);
   static int onUrlCB(http_parser *, const char *, size_t);  
+  void onStatus(const char *, size_t);
+  static int onStatusCB(http_parser *, const char *, size_t);  
 
 };
 

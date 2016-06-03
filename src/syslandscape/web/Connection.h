@@ -50,6 +50,8 @@ private:
   void setTimeout(long seconds);
   
   void handleRequestStatus();
+
+  void onRequest(Status, const std::string &);
   
 };
 

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <boost/asio/streambuf.hpp>
+#include "Types.h"
 #include "Headers.h"
 
 namespace syslandscape {
@@ -21,23 +22,37 @@ public:
   
   Request& operator=(const Request&) = delete;
 
+  Method method() const;
+  
+  void method(Method);
+  
   Headers& headers();
 
   const Headers& headers() const;
 
-  boost::asio::streambuf & buffer();
-
   std::string uri() const;
 
   void uri(const std::string &);
+
+  uint64_t contentLength() const;
+  
+  void contentLength(uint64_t);
+
+  std::string body() const;
+
+  void body(const std::string &);  
   
 private:
 
+  Method _method;
+  
   std::string _uri;
   
   Headers _header;
 
-  boost::asio::streambuf _buffer;
+  uint64_t _contentLength = 0;
+
+  std::string _body;
 
 };
 
