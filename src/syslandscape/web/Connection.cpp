@@ -4,16 +4,22 @@
 #include <boost/asio.hpp>
 
 using std::shared_ptr;
+using std::make_shared;
+using boost::system::error_code;
 using syslandscape::web::internal::ConnectionManager;
 
 namespace syslandscape {
 namespace web {
 
-Connection::Connection(socket_ptr socket, ConnectionManager &connectionManager)
-  : _socket(socket),
-    _strand(_socket->get_io_service()),
+Connection::Connection(std::shared_ptr<Settings> settings, socket_ptr socket, ConnectionManager &connectionManager)
+  : _settings(settings),
+    _socket(socket),
+    _strand(std::make_shared<strand>(_socket->get_io_service())),
     _timer(std::make_shared<timer>(_socket->get_io_service())),
-    _connectionManager(connectionManager)
+    _connectionManager(connectionManager),
+    _request(make_shared<Request>()),
+    _response(make_shared<Response>()),
+    _requestUtil(_settings, _socket, _strand, _request)
 { }
 
 Connection::~Connection()
@@ -32,7 +38,8 @@ void Connection::stop()
 void Connection::start()
 {
   _connectionManager.add(shared_from_this());
-  doRead();
+  //  _requestUtil.read([this] () { handleRequestStatus(); })
+  _requestUtil.read();
 }
 
 void Connection::setTimeout(long seconds)
@@ -47,20 +54,9 @@ void Connection::setTimeout(long seconds)
     });
 }
 
-void Connection::doRead()
+void Connection::handleRequestStatus()
 {
-  std::cout << "AD" << std::endl;
-  shared_ptr<boost::asio::streambuf> buf = std::make_shared<boost::asio::streambuf>();
-
-  boost::asio::async_read(*_socket, *buf, boost::asio::transfer_at_least(5), [this, buf] ( const boost::system::error_code & ec, size_t length) {
-      if (!ec)
-        read(buf, length);
-    });
-}
-
-void Connection::read(shared_ptr<boost::asio::streambuf> buf, std::size_t)
-{
-  std::cout << "ADSADSASD" << std::endl;
+  std::cout << "ADSASDASDASDDS" << std::endl;
 }
 
 } /* namespace web */

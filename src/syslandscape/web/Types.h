@@ -17,6 +17,7 @@ typedef boost::asio::signal_set signal_set;
 typedef boost::asio::ip::tcp::socket socket;
 typedef std::shared_ptr<socket> socket_ptr;
 typedef boost::asio::io_service::strand strand;
+typedef std::shared_ptr<strand> strand_ptr;
 typedef boost::asio::deadline_timer timer;
 typedef std::shared_ptr<timer> timer_ptr;
 

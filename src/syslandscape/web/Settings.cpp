@@ -85,5 +85,27 @@ uint16_t Settings::sendBufferSize() const
   return _sendBufferSize;
 }
 
+void Settings::requestMaxSize(size_t value)
+{
+  _requestMaxSize = value;
+}
+
+std::size_t Settings::requestMaxSize() const
+{
+  return _requestMaxSize;
+}
+
+
+void Settings::requestBufferSize(size_t value)
+{
+  _requestBufferSize = value;
+}
+
+std::size_t Settings::rquestBufferSize() const
+{
+  return _requestBufferSize;
+}
+
+
 } /* web */
 } /* engine  */

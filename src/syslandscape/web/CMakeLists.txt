@@ -17,6 +17,7 @@ set(SOURCES
   http_parser.c
 
   Types.cpp
+  Headers.cpp
   Request.cpp
   Response.cpp
   Service.cpp
@@ -24,6 +25,8 @@ set(SOURCES
   Connection.cpp
   internal/IOServicePool.cpp
   internal/ConnectionManager.cpp
+  internal/HttpRequestUtil.cpp
+  internal/HttpResponseUtil.cpp
   )
 
 add_library(${SYSLANDSCAPE_WEB} SHARED ${SOURCES})

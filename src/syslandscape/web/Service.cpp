@@ -26,6 +26,7 @@ Service::~Service()
 
 void Service::run()
 {
+  doAccept();
   _ioServicePool.run();
 }
 
@@ -87,10 +88,12 @@ void Service::doAccept()
 
 void Service::acceptConnection(socket_ptr socket)
 {
+
+  std::cout << "Accept new connection from " << socket->remote_endpoint().address().to_string() << std::endl;
   boost::asio::ip::tcp::no_delay option(_settings->noDelay());
   socket->set_option(option);
 
-  shared_ptr<Connection> connection = make_shared<Connection>(socket, _connectionManager);
+  shared_ptr<Connection> connection = make_shared<Connection>(_settings, socket, _connectionManager);
   connection->start();
 }
 

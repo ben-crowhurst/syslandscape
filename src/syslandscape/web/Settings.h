@@ -41,6 +41,14 @@ public:
   void sendBufferSize(uint16_t);
 
   uint16_t sendBufferSize() const;
+
+  void requestMaxSize(size_t);
+
+  std::size_t requestMaxSize() const;
+
+  void requestBufferSize(size_t);
+
+  std::size_t rquestBufferSize() const;
   
 private:
 
@@ -60,6 +68,17 @@ private:
   uint16_t _receiveBufferSize = 8192;
 
   uint16_t _sendBufferSize = 8192;
+
+  /* Maximum allowed size in bytes for request (including headers and 
+   * body
+   */
+  std::size_t _requestMaxSize = 1000000;
+
+  /**
+   * Size of request read buffer. After every read, @_requestMaxSize
+   * is tested. 
+   */
+  std::size_t _requestBufferSize = 1000;
 };
 
 } /* web */

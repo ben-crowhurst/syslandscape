@@ -1,0 +1,56 @@
+#ifndef SYSLANDSCAPE_WEB_INTERNAL_HTTPREQUESTUTIL
+#define SYSLANDSCAPE_WEB_INTERNAL_HTTPREQUESTUTIL
+
+#include <functional>
+#include "../Types.h"
+#include "../Settings.h"
+#include "../Request.h"
+
+extern "C" {
+#include <syslandscape/web/http_parser.h>
+}
+
+namespace syslandscape {
+namespace web {
+namespace internal {
+
+class HttpRequestUtil final
+{
+public:
+
+  HttpRequestUtil(std::shared_ptr<Settings>, socket_ptr, strand_ptr, request_ptr);
+
+  HttpRequestUtil(const HttpRequestUtil &) = delete;
+
+  ~HttpRequestUtil();
+
+  void reset();
+
+  void read();
+  
+private:
+
+  std::shared_ptr<Settings> _settings;
+  
+  socket_ptr _socket;
+  
+  strand_ptr _strand;
+
+  request_ptr _request;
+  
+  http_parser_settings _parser_settings;
+  
+  http_parser _parser;
+
+  void onData(boost::system::error_code, size_t);
+  
+  void onUrl(const char *, size_t);
+  static int onUrlCB(http_parser *, const char *, size_t);  
+
+};
+
+} /* internal */
+} /* namespace web */
+} /* namespace syslandscape */
+
+#endif /* SYSLANDSCAPE_WEB_INTERNAL_HTTPREQUESTUTIL */
