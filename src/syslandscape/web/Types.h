@@ -27,6 +27,18 @@ static constexpr auto HEADER_CONTENT_LENGTH = "Content-Length";
 static constexpr auto HEADER_CONTENT_TYPE = "Content-Type";
 static constexpr auto  HEADER_REQUEST_COOKIE = "Cookie";
 static constexpr auto HEADER_RESPONSE_COOKIE = "Set-Cookie";
+static constexpr auto HTTP_HEADER_CONNECTION = "connection";
+
+/** 
+ * Required easily convert Enum to underling type (int). 
+ *
+ * to_underlying(Status::OK)
+ */
+template <typename E>
+constexpr auto to_underlying(E e) noexcept
+{
+    return static_cast<std::underlying_type_t<E>>(e);
+}
 
 /**
  * UNKOWN should be used only while parsing and indicates an error.
@@ -42,12 +54,16 @@ enum class Method
 };
 
 Method toMethod(int);
+
 Method toMethod(const std::string &);
+
 std::string toString(Method);
 
 enum class Status
 {
-  OK = 200,
+  CONTINUE = 100,
+    SWITCH_PROTOCOL = 101,
+    OK = 200,
     CREATED = 201,
     ACCEPTED = 202,
     NO_CONTENT = 204,

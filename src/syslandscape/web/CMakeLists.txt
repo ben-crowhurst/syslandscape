@@ -8,6 +8,7 @@ set(SOURCES
   Cookies.cpp
   Request.cpp
   Response.cpp
+  Handler.cpp
   Service.cpp
   Settings.cpp
   Connection.cpp

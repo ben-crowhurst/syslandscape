@@ -1,10 +1,14 @@
 #ifndef SYSLANDSCAPE_WEB_SETTINGS
 #define SYSLANDSCAPE_WEB_SETTINGS
 
+#include <memory>
 #include <string>
 
 namespace syslandscape {
 namespace web {
+
+class Settings;
+typedef std::shared_ptr<Settings> settings_ptr;
 
 class Settings
 {

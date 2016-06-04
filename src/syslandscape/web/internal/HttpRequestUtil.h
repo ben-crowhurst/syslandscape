@@ -18,7 +18,7 @@ class HttpRequestUtil final
 {
 public:
 
-  HttpRequestUtil(std::shared_ptr<Settings>, socket_ptr, strand_ptr, request_ptr);
+  HttpRequestUtil(settings_ptr, socket_ptr, strand_ptr, request_ptr);
 
   HttpRequestUtil(const HttpRequestUtil &) = delete;
 
@@ -29,6 +29,7 @@ public:
   void read();
 
   void read(const std::function<void (Status, const std::string &)>);
+
 private:
 
   std::shared_ptr<Settings> _settings;

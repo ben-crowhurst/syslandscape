@@ -24,6 +24,8 @@ public:
   std::string get(const std::string &) const;
 
   bool has(const std::string &) const;
+
+  void clear();
   
 private:
 

@@ -93,7 +93,11 @@ void Service::acceptConnection(socket_ptr socket)
   boost::asio::ip::tcp::no_delay option(_settings->noDelay());
   socket->set_option(option);
 
-  shared_ptr<Connection> connection = make_shared<Connection>(_settings, socket, _connectionManager);
+  shared_ptr<Connection> connection = make_shared<Connection>(
+                                                              _settings,
+                                                              socket,
+                                                              make_shared<Handler>(),
+                                                              _connectionManager);
   connection->start();
 }
 

@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "Request.h"
 #include "Response.h"
+#include "Handler.h"
 #include "internal/ConnectionManager.h"
 #include "internal/HttpRequestUtil.h"
 #include "internal/HttpResponseUtil.h"
@@ -15,7 +16,7 @@ class Connection : public std::enable_shared_from_this<Connection>
 {
 public:
 
-  explicit Connection(std::shared_ptr<Settings>, socket_ptr, internal::ConnectionManager &);
+  explicit Connection(settings_ptr, socket_ptr, handler_ptr, internal::ConnectionManager &);
 
   virtual ~Connection();
 
@@ -33,6 +34,8 @@ private:
   
   socket_ptr _socket;
 
+  handler_ptr _handler;
+
   strand_ptr _strand;
 
   timer_ptr _timer;
@@ -48,11 +51,12 @@ private:
   internal::HttpResponseUtil _responseUtil;
   
   void setTimeout(long seconds);
-  
-  void handleRequestStatus();
 
-  void onRequest(Status, const std::string &);
+  void onRequestBegin();
   
+  void onRequest(Status, const std::string &);
+
+  void onResponseEnd(boost::system::error_code);
 };
 
 } /* namespace web */

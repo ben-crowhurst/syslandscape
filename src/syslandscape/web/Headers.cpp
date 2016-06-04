@@ -1,7 +1,10 @@
 #include "Headers.h"
 
+#include <syslandscape/util/StringUtil.h>
+
 using std::map;
 using std::string;
+using syslandscape::util::StringUtil;
 
 namespace syslandscape {
 namespace web {
@@ -28,19 +31,23 @@ const map<string, string> & Headers::get() const
 
 void Headers::set(const string &name, const string &value)
 {
-  _header[name] = value;
+  _header[StringUtil::toLowerCase(name)] = value;
 }
 
 string Headers::get(const std::string &name) const
 {
-  return _header.at(name);
+  return _header.at(StringUtil::toLowerCase(name));
 }
 
 bool Headers::has(const std::string &name) const
 {
-  return _header.find(name) != _header.end();
+  return _header.find(StringUtil::toLowerCase(name)) != _header.end();
 }
 
+void Headers::clear()
+{
+  _header.clear();
+}
 
 } /* namespace web */
 } /* namespace syslandscape */
