@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <boost/asio.hpp>
+#include "../Connection.h"
 #include "../Cookie.h"
 #include <syslandscape/util/StringUtil.h>
 
@@ -10,14 +11,15 @@ using std::string;
 using std::vector;
 using std::function;
 using boost::system::error_code;
+using syslandscape::web::Connection;
 using syslandscape::util::StringUtil;
 
 namespace syslandscape {
 namespace web {
 namespace internal {
 
-HttpRequestUtil::HttpRequestUtil(std::shared_ptr<Settings> settings, socket_ptr socket, strand_ptr strand, request_ptr request)
-  : _settings(settings), _socket(socket), _strand(strand), _request(request)
+HttpRequestUtil::HttpRequestUtil(Connection &c)
+  : _connection(c)
 {
   reset();
   _parser.data = this;
@@ -48,32 +50,26 @@ void HttpRequestUtil::reset()
 
 void HttpRequestUtil::read()
 {
-  _socket->async_read_some(_buffer.prepare(_settings->receiveBufferSize()),
-                           _strand->wrap([this] (error_code ec, size_t size)
-                                         {
-                                           onData(ec, size);
-                                         }
-                                         )
-                           );
-}
-
-void HttpRequestUtil::read(const std::function<void (Status, const std::string &)> callback)
-{
-  _callback = callback;
-  _socket->async_read_some(_buffer.prepare(_settings->receiveBufferSize()),
-                           _strand->wrap([this] (error_code ec, size_t size) { onData(ec, size); } ));
+  _connection._socket->async_read_some(
+                           _buffer.prepare(_connection._settings->receiveBufferSize()),
+                           _connection._strand->wrap([this] (error_code ec, size_t size) { onData(ec, size); } ));
 }
 
 void HttpRequestUtil::onData(error_code error, size_t transferred)
 {
-  if (error)
-    {
-      _callback(Status::BAD_REQUEST, error.category().name() + error.value());
+  if (error == boost::asio::error::operation_aborted || error == boost::asio::error::eof)
+    {      
+      _connection.stop();
       return;
     }
-  if (_settings->requestMaxSize() < _parser.nread + transferred)
+  if (error)
     {
-      _callback(Status::BAD_REQUEST, "Request message too big.");
+      _connection.onRequest(Status::BAD_REQUEST, error.category().name() + error.value());
+      return;
+    }
+  if (_connection._settings->requestMaxSize() < _parser.nread + transferred)
+    {
+      _connection.onRequest(Status::BAD_REQUEST, "Request message too big.");
       return;
     }
   
@@ -88,11 +84,15 @@ void HttpRequestUtil::onData(error_code error, size_t transferred)
   
   if (parsed != transferred)
     {
-      _callback(Status::BAD_REQUEST, "Error while parsing message.");      
+      _connection.onRequest(Status::BAD_REQUEST, "Error while parsing message.");      
       return;
     }
 
-  read();
+  if (_connection._request->headers().has("Connection")
+      && StringUtil::toLowerCase(_connection._request->headers().get("Connection")) == "close")
+    {
+      read();
+    }
 }
 
 void HttpRequestUtil::parseCookies(const string &content)
@@ -106,14 +106,14 @@ void HttpRequestUtil::parseCookies(const string &content)
       if (cookiePair.size() != 2)
         continue;
       Cookie cookie(StringUtil::trim(cookiePair[0]), StringUtil::trim(cookiePair[1]));
-      _request->cookies().set(cookie);
+      _connection._request->cookies().set(cookie);
     }    
 }
 
 
 void HttpRequestUtil::onBody(const char *data, size_t size)
 {
-  _request->body(std::string(data, size));
+  _connection._request->body(std::string(data, size));
 }
 int HttpRequestUtil::onBodyCB(http_parser * parser, const char *data, size_t size)
 {
@@ -123,7 +123,7 @@ int HttpRequestUtil::onBodyCB(http_parser * parser, const char *data, size_t siz
 }
 void HttpRequestUtil::onMessageComplete()
 {
-  _callback(Status::OK, "");
+  _connection.onRequest(Status::OK, "");  
 }
 int HttpRequestUtil::onMessageCompleteCB(http_parser * parser)
 {
@@ -134,7 +134,7 @@ int HttpRequestUtil::onMessageCompleteCB(http_parser * parser)
 
 void HttpRequestUtil::onHeadersComplete()
 {
-  _request->contentLength(_parser.content_length);
+  _connection._request->contentLength(_parser.content_length);
 }
 int HttpRequestUtil::onHeadersCompleteCB(http_parser * parser)
 {
@@ -155,7 +155,7 @@ int HttpRequestUtil::onHeaderNameCB(http_parser * parser, const char *data, size
 void HttpRequestUtil::onHeaderValue(const char *data, size_t size)
 {
   std::string value(data, size);
-  _request->headers().set(_headerName, value);
+  _connection._request->headers().set(_headerName, value);
   if (syslandscape::web::HEADER_REQUEST_COOKIE == _headerName)
     {
       parseCookies(value);
@@ -171,10 +171,8 @@ int HttpRequestUtil::onHeaderValueCB(http_parser * parser, const char *data, siz
 
 void HttpRequestUtil::onUrl(const char *data, size_t size)
 {
-  _request->uri(std::string(data, size));
-  _request->method(toMethod(_parser.method));
-  std::cout << "URL " << _request->uri() <<  std::endl;
-  std::cout << "Method " << toString(_request->method()) << std::endl;
+  _connection._request->uri(std::string(data, size));
+  _connection._request->method(toMethod(_parser.method));
 }
 int HttpRequestUtil::onUrlCB(http_parser * parser, const char *data, size_t size)
 {

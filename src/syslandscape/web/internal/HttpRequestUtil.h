@@ -1,7 +1,6 @@
 #ifndef SYSLANDSCAPE_WEB_INTERNAL_HTTPREQUESTUTIL
 #define SYSLANDSCAPE_WEB_INTERNAL_HTTPREQUESTUTIL
 
-#include <functional>
 #include "../Types.h"
 #include "../Settings.h"
 #include "../Request.h"
@@ -12,13 +11,21 @@ extern "C" {
 
 namespace syslandscape {
 namespace web {
+
+class Connection;
+
+}
+}
+
+namespace syslandscape {
+namespace web {
 namespace internal {
 
 class HttpRequestUtil final
 {
 public:
 
-  HttpRequestUtil(settings_ptr, socket_ptr, strand_ptr, request_ptr);
+  HttpRequestUtil(Connection &);
 
   HttpRequestUtil(const HttpRequestUtil &) = delete;
 
@@ -28,18 +35,10 @@ public:
 
   void read();
 
-  void read(const std::function<void (Status, const std::string &)>);
-
 private:
 
-  std::shared_ptr<Settings> _settings;
-  
-  socket_ptr _socket;
-  
-  strand_ptr _strand;
-
-  request_ptr _request;
-  
+  Connection &_connection;
+    
   http_parser_settings _parser_settings;
   
   http_parser _parser;
@@ -48,8 +47,6 @@ private:
 
   boost::asio::streambuf _buffer;
 
-  std::function<void (Status, const std::string &)> _callback;
-    
   void onData(boost::system::error_code, size_t);
 
   void parseCookies(const std::string &);

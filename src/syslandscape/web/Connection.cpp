@@ -22,7 +22,7 @@ Connection::Connection(settings_ptr settings, socket_ptr socket, handler_ptr han
     _connectionManager(connectionManager),
     _request(make_shared<Request>()),
     _response(make_shared<Response>()),
-    _requestUtil(_settings, _socket, _strand, _request),
+    _requestUtil(*this),
     _responseUtil(_settings, _socket, _strand, _response)
 { }
 
@@ -31,6 +31,9 @@ Connection::~Connection()
 
 void Connection::stop()
 {
+  if (!_socket->is_open())
+    return;
+  
   _timer->cancel();
   boost::system::error_code ec; 
   _socket->lowest_layer().shutdown(socket::shutdown_both, ec);
@@ -59,7 +62,7 @@ void Connection::setTimeout(long seconds)
 
 void Connection::onRequestBegin()
 {
-  _requestUtil.read([this] (Status status, const std::string &error) { onRequest(status, error); });
+  _requestUtil.read();
 }
 
 void Connection::onRequest(Status status, const std::string &error)

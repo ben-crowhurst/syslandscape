@@ -57,6 +57,8 @@ private:
   void onRequest(Status, const std::string &);
 
   void onResponseEnd(boost::system::error_code);
+
+  friend class syslandscape::web::internal::HttpRequestUtil;
 };
 
 } /* namespace web */
