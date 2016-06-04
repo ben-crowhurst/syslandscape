@@ -31,6 +31,16 @@ const Headers & Request::headers() const
   return _header;
 }
 
+Cookies& Request::cookies()
+{
+  return _cookie;
+}
+
+const Cookies& Request::cookies() const
+{
+  return _cookie;
+}
+
 string Request::uri() const
 {
   return _uri;

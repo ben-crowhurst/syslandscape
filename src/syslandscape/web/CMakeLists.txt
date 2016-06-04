@@ -4,6 +4,8 @@ set(SOURCES
 
   Types.cpp
   Headers.cpp
+  Cookie.cpp
+  Cookies.cpp
   Request.cpp
   Response.cpp
   Service.cpp

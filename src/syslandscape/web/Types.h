@@ -21,6 +21,13 @@ typedef std::shared_ptr<strand> strand_ptr;
 typedef boost::asio::deadline_timer timer;
 typedef std::shared_ptr<timer> timer_ptr;
 
+
+static constexpr auto HEADER_HOST = "Host";
+static constexpr auto HEADER_CONTENT_LENGTH = "Content-Length";
+static constexpr auto HEADER_CONTENT_TYPE = "Content-Type";
+static constexpr auto  HEADER_REQUEST_COOKIE = "Cookie";
+static constexpr auto HEADER_RESPONSE_COOKIE = "Set-Cookie";
+
 /**
  * UNKOWN should be used only while parsing and indicates an error.
  */

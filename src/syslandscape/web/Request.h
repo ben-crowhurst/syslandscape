@@ -5,6 +5,7 @@
 #include <boost/asio/streambuf.hpp>
 #include "Types.h"
 #include "Headers.h"
+#include "Cookies.h"
 
 namespace syslandscape {
 namespace web {
@@ -30,6 +31,10 @@ public:
 
   const Headers& headers() const;
 
+  Cookies& cookies();
+
+  const Cookies& cookies() const;
+  
   std::string uri() const;
 
   void uri(const std::string &);
@@ -50,6 +55,8 @@ private:
   
   Headers _header;
 
+  Cookies _cookie;
+  
   uint64_t _contentLength = 0;
 
   std::string _body;

@@ -1,10 +1,16 @@
 #include "HttpRequestUtil.h"
 
 #include <iostream>
+#include <vector>
 #include <boost/asio.hpp>
+#include "../Cookie.h"
+#include <syslandscape/util/StringUtil.h>
 
+using std::string;
+using std::vector;
 using std::function;
 using boost::system::error_code;
+using syslandscape::util::StringUtil;
 
 namespace syslandscape {
 namespace web {
@@ -34,6 +40,10 @@ void HttpRequestUtil::reset()
   _parser_settings.on_headers_complete = HttpRequestUtil::onHeadersCompleteCB;
   _parser_settings.on_body = HttpRequestUtil::onBodyCB;
   _parser_settings.on_message_complete = HttpRequestUtil::onMessageCompleteCB;
+
+  _parser.data = this;
+
+  _headerName.clear();
 }
 
 void HttpRequestUtil::read()
@@ -85,6 +95,21 @@ void HttpRequestUtil::onData(error_code error, size_t transferred)
   read();
 }
 
+void HttpRequestUtil::parseCookies(const string &content)
+{
+  vector<string> cookieList = StringUtil::split(content, ";");
+  
+  for (auto value: cookieList)
+    {
+      auto cookiePair = StringUtil::split(value, "=");
+      /* Something is wrong, ignore */
+      if (cookiePair.size() != 2)
+        continue;
+      Cookie cookie(StringUtil::trim(cookiePair[0]), StringUtil::trim(cookiePair[1]));
+      _request->cookies().set(cookie);
+    }    
+}
+
 
 void HttpRequestUtil::onBody(const char *data, size_t size)
 {
@@ -129,9 +154,12 @@ int HttpRequestUtil::onHeaderNameCB(http_parser * parser, const char *data, size
 }
 void HttpRequestUtil::onHeaderValue(const char *data, size_t size)
 {
-  _request->headers().set(_headerName, std::string(data, size));
-
-  std::cout << "Header " << _headerName << " - " << _request->headers().get(_headerName) << std::endl;
+  std::string value(data, size);
+  _request->headers().set(_headerName, value);
+  if (syslandscape::web::HEADER_REQUEST_COOKIE == _headerName)
+    {
+      parseCookies(value);
+    }
   _headerName.clear();
 }
 int HttpRequestUtil::onHeaderValueCB(http_parser * parser, const char *data, size_t size)
