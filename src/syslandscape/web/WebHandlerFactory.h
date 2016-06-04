@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-#include "HTTPRequest.h"
+#include "Request.h"
 #include "WebHandler.h"
 
 namespace syslandscape {
@@ -15,7 +15,7 @@ public:
 
   virtual ~WebHandlerFactory();
   
-  virtual std::unique_ptr<WebHandler> getHandler(const std::string &, HTTPRequest &) = 0;
+  virtual std::unique_ptr<WebHandler> getHandler(const std::string &, Request &) = 0;
   
 };
 

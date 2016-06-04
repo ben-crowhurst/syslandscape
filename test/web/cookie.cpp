@@ -3,22 +3,22 @@
 #include <chrono>
 #include <ctime>
 #include <gtest/gtest.h>
-#include <syslandscape/web/HTTPCookie.h>
+#include <syslandscape/web/Cookie.h>
 #include <syslandscape/util/StringUtil.h>
 
-using syslandscape::web::HTTPCookie;
+using syslandscape::web::Cookie;
 using syslandscape::util::StringUtil;
 
-TEST(HTTPCookie, SimpleSerialization)
+TEST(Cookie, SimpleSerialization)
 {
   using namespace std::chrono;
-  HTTPCookie c;
+  Cookie c;
   c.setComment("Comment");
   c.setDiscard(false);
   c.setDomain("syslandscape.org");
   c.setPath("/");
-  c.setName("test");
-  c.setValue("test");
+  c.name("test");
+  c.value("test");
   c.setMaxAge(system_clock::now() + hours(1));
   c.setHttpOnly(true);
 

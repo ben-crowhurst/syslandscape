@@ -2,8 +2,8 @@
 #define SYSLANDSCAPE_WEB_WEBHANDLER
 
 #include <string>
-#include "HTTPRequest.h"
-#include "HTTPResponse.h"
+#include "Request.h"
+#include "Response.h"
 
 namespace syslandscape {
 namespace web {
@@ -14,7 +14,7 @@ public:
 
   virtual ~WebHandler();
   
-  virtual void handle(HTTPRequest &, HTTPResponse &) = 0;
+  virtual void handle(Request &, Response &) = 0;
 
 };
 

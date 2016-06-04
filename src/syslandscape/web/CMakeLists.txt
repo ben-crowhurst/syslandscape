@@ -1,5 +1,8 @@
 set(SOURCES
   WebException.cpp
+  WebHandler.cpp
+  WebContext.cpp
+  WebPathSegment.cpp
   http_parser.c
 
   Types.cpp
