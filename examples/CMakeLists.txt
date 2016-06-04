@@ -10,3 +10,12 @@ target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_UTIL})
 target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_WEB})
 target_link_libraries(${EXAMPLE_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
+SET(EXAMPLE_NAME client)
+add_executable(${EXAMPLE_NAME} web/client.cpp)
+target_link_libraries(${EXAMPLE_NAME} -lasan -lubsan)
+target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE})
+target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_TMPL})
+target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_UTIL})
+target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_WEB})
+target_link_libraries(${EXAMPLE_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+

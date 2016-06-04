@@ -87,7 +87,7 @@ void Connection::onRequest(Status status, const std::string &error)
       _response->status(status);
       _response->body(error);
     }
-  _response->headers().set(HEADER_CONTENT_LENGTH, std::to_string(_response->body().size()));
+  _response->headers().set(HTTP_HEADER_CONTENT_LENGTH, std::to_string(_response->body().size()));
   _responseUtil.write([this] (boost::system::error_code error) { onResponseEnd(error);  } );
 }
 

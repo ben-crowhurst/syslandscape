@@ -159,7 +159,7 @@ void HttpRequestUtil::onHeaderValue(const char *data, size_t size)
 {
   std::string value(data, size);
   _connection._request->headers().set(_headerName, value);
-  if (syslandscape::web::HEADER_REQUEST_COOKIE == _headerName)
+  if (syslandscape::web::HTTP_HEADER_REQUEST_COOKIE == _headerName)
     {
       parseCookies(value);
     }

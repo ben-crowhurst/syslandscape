@@ -9,6 +9,7 @@ set(SOURCES
   Request.cpp
   Response.cpp
   Handler.cpp
+  Client.cpp
   Service.cpp
   Settings.cpp
   Connection.cpp
@@ -16,6 +17,7 @@ set(SOURCES
   internal/ConnectionManager.cpp
   internal/HttpRequestUtil.cpp
   internal/HttpResponseUtil.cpp
+  internal/ClientRequestUtil.cpp
   )
 
 add_library(${SYSLANDSCAPE_WEB} SHARED ${SOURCES})
