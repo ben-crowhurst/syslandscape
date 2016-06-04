@@ -106,6 +106,16 @@ std::size_t Settings::rquestBufferSize() const
   return _requestBufferSize;
 }
 
+uint16_t Settings::keepAliveTimeout() const
+{
+  return _keepAliveTimeout;
+}
+
+void Settings::keepAlivetimeout(uint16_t value)
+{
+  _keepAliveTimeout = value;
+}
+
 
 } /* web */
 } /* engine  */

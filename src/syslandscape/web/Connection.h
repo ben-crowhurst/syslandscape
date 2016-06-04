@@ -39,7 +39,7 @@ private:
   strand_ptr _strand;
 
   timer_ptr _timer;
-
+  
   internal::ConnectionManager& _connectionManager;
 
   request_ptr _request;

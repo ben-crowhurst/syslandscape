@@ -53,6 +53,10 @@ public:
   void requestBufferSize(size_t);
 
   std::size_t rquestBufferSize() const;
+
+  uint16_t keepAliveTimeout() const;
+
+  void keepAlivetimeout(uint16_t);
   
 private:
 
@@ -83,6 +87,12 @@ private:
    * is tested. 
    */
   std::size_t _requestBufferSize = 1000;
+
+  /** The number of seconds Connection will wait for a subsequent 
+   * request before closing the connection. Once a request has been 
+   * received, the timeout value specified by the Timeout directive 
+   * applies. */
+  uint16_t _keepAliveTimeout = 15;  
 };
 
 } /* web */

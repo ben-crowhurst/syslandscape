@@ -50,6 +50,7 @@ void HttpRequestUtil::reset()
 
 void HttpRequestUtil::read()
 {
+  _connection.setTimeout(_connection._settings->keepAliveTimeout());
   _connection._socket->async_read_some(
                            _buffer.prepare(_connection._settings->receiveBufferSize()),
                            _connection._strand->wrap([this] (error_code ec, size_t size) { onData(ec, size); } ));
@@ -57,6 +58,8 @@ void HttpRequestUtil::read()
 
 void HttpRequestUtil::onData(error_code error, size_t transferred)
 {
+  _connection._timer->cancel();
+ 
   if (error == boost::asio::error::operation_aborted || error == boost::asio::error::eof)
     {      
       _connection.stop();

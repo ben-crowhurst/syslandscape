@@ -24,10 +24,15 @@ Connection::Connection(settings_ptr settings, socket_ptr socket, handler_ptr han
     _response(make_shared<Response>()),
     _requestUtil(*this),
     _responseUtil(_settings, _socket, _strand, _response)
-{ }
+{
+  std::cout << "Conn constructor" << std::endl;
+}
 
 Connection::~Connection()
-{ }
+{
+  _timer->cancel();
+  std::cout << "Conn destr" << std::endl;
+}
 
 void Connection::stop()
 {
@@ -53,8 +58,9 @@ void Connection::setTimeout(long seconds)
   _timer->cancel();
   _timer->expires_from_now(boost::posix_time::seconds(seconds));
   _timer->async_wait([this](const boost::system::error_code& ec) {
-      if(!ec)
+      if (!ec)
         {
+          std::cout << "TIMEOUT" << std::endl;
           stop();
         }
     });
