@@ -78,8 +78,6 @@ void Connection::onRequest(Status status, const std::string &error)
       std::cout << "Error reading request: " << error << std::endl;
       return;
     }
-
-  _handler->handle(_request, _response);
   
   if (status != Status::OK)
     {
@@ -87,8 +85,13 @@ void Connection::onRequest(Status status, const std::string &error)
       _response->status(status);
       _response->body(error);
     }
+  else
+    {
+      _handler->handle(_request, _response);
+    }
+
   _response->headers().set(HTTP_HEADER_CONTENT_LENGTH, std::to_string(_response->body().size()));
-  _responseUtil.write([this] (boost::system::error_code error) { onResponseEnd(error);  } );
+  _responseUtil.write([this] (boost::system::error_code error) { onResponseEnd(error);  } );  
 }
 
 void Connection::onResponseEnd(boost::system::error_code error)

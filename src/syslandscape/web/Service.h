@@ -4,6 +4,7 @@
 #include <memory>
 #include "Types.h"
 #include "Settings.h"
+#include "Handler.h"
 #include "internal/IOServicePool.h"
 #include "internal/ConnectionManager.h"
 
@@ -28,8 +29,10 @@ public:
   
 private:
 
-  std::shared_ptr<Settings> _settings;
+  settings_ptr _settings;
 
+  handler_ptr _handler;
+  
   internal::IOServicePool _ioServicePool;
 
   internal::ConnectionManager _connectionManager;

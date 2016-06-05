@@ -11,6 +11,7 @@ namespace web {
 
 Service::Service(shared_ptr<Settings> settings)
   : _settings(settings),
+    _handler(std::make_shared<Handler>()),
     _ioServicePool(_settings->workerThreads()),
     _connectionManager(),
     _acceptor(_ioServicePool.get()),
@@ -96,7 +97,7 @@ void Service::acceptConnection(socket_ptr socket)
   shared_ptr<Connection> connection = make_shared<Connection>(
                                                               _settings,
                                                               socket,
-                                                              make_shared<Handler>(),
+                                                              _handler,
                                                               _connectionManager);
   connection->start();
 }
