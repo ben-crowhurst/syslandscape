@@ -61,7 +61,8 @@ std::string toString(Method);
 
 enum class Status
 {
-  CONTINUE = 100,
+  UNKNOWN = 0,
+    CONTINUE = 100,
     SWITCH_PROTOCOL = 101,
     OK = 200,
     CREATED = 201,
@@ -80,6 +81,8 @@ enum class Status
     BAD_GATEWAY = 502,
     SERVICE_UNAVAILABLE = 503
 };
+
+Status toStatus(short);
 
 } /* namespace web */
 } /* namespace syslandscape */

@@ -3,13 +3,13 @@
 #include <iostream>
 #include <ostream>
 #include <istream>
+#include "WebException.h"
 
-using std::cout;
-using std::endl;
 using std::ostream;
 using std::istream;
 using std::string;
 using boost::asio::streambuf;
+using syslandscape::web::internal::ClientResponseUtil;
 
 namespace syslandscape {
 namespace web {
@@ -20,7 +20,8 @@ Client::Client(const string &server, int port)
     _io_service(),
     _endpoint(),
     _resolver(_io_service),
-    _socket(_io_service)
+    _socket(_io_service),
+    _responseUtil()
 {
 
 }
@@ -41,36 +42,55 @@ void Client::connect()
 
 response_ptr Client::execute(request_ptr request)
 {
-  streambuf buffer;
-  serialize(buffer, request);
-
-  boost::asio::write(_socket, buffer);
-
-  size_t bytes_transferred = boost::asio::read_until(_socket, buffer, "\r\n\r\n");
-
-  cout << "Size " << bytes_transferred << endl;
-  
-  istream input(&buffer);
-
-  string line;
-
-  while (std::getline(input, line))
-    {
-      cout << line << endl;
-    }
-  
   response_ptr response = std::make_shared<Response>();
+  
+  doRequest(request);
+
+  doResponse(response);
+    
   return response;
 }
 
-
-void Client::serialize(streambuf &buffer, request_ptr request)
+void Client::doResponse(response_ptr response)
 {
+  streambuf buffer;
+  ClientResponseUtil::ParserStatus status;  
+  boost::system::error_code error;
+
+  do {
+    size_t bytes_transferred = boost::asio::read(_socket, buffer, error);
+    status = _responseUtil.parse(response, boost::asio::buffer_cast<const char*>(buffer.data()), bytes_transferred);
+
+    if (status == ClientResponseUtil::ParserStatus::ERROR)
+      {
+        break;
+      }
+
+    if (error && error != boost::asio::error::eof)
+      {
+        break;
+      }
+    
+  } while (error != boost::asio::error::eof);
+
+  if(status  == ClientResponseUtil::ParserStatus::ERROR)
+    {
+      throw WebException("Error parsing response.");
+    }
+  if (error && error != boost::asio::error::eof)
+    {
+      throw WebException(error.message());
+    }
+}
+
+void Client::doRequest(request_ptr request)
+{
+  streambuf buffer;
   ostream out(&buffer);
 
   out << toString(request->method());
   out << " " << request->uri();
-  out << "HTTP/1.1\r\n";
+  out << " HTTP/1.1\r\n";
 
   if (request->body().size() > 0 && !request->headers().has(HTTP_HEADER_CONTENT_LENGTH))
     {
@@ -88,6 +108,7 @@ void Client::serialize(streambuf &buffer, request_ptr request)
       out << "\r\n";
     }
   
+  boost::asio::write(_socket, buffer);  
 }
 
 } /* web */

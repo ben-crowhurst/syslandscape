@@ -6,6 +6,7 @@
 #include "Types.h"
 #include "Request.h"
 #include "Response.h"
+#include "internal/ClientResponseUtil.h"
 
 namespace syslandscape {
 namespace web {
@@ -32,7 +33,12 @@ private:
   boost::asio::ip::tcp::resolver _resolver;
   socket _socket;
 
-  void serialize(boost::asio::streambuf &, request_ptr);
+  syslandscape::web::internal::ClientResponseUtil _responseUtil;
+  
+  void doRequest(request_ptr);
+
+  void doResponse(response_ptr);
+  
   
 };
 

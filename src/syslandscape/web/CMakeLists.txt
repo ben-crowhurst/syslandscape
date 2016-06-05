@@ -21,6 +21,7 @@ set(SOURCES
   internal/HttpRequestUtil.cpp
   internal/HttpResponseUtil.cpp
   internal/ClientRequestUtil.cpp
+  internal/ClientResponseUtil.cpp
   )
 
 add_library(${SYSLANDSCAPE_WEB} SHARED ${SOURCES})

@@ -39,5 +39,15 @@ std::string toString(Method method)
   }
 }
 
+Status toStatus(short value)
+{
+  switch(value)
+    {
+    case 404: return Status::BAD_REQUEST;
+    default: return Status::UNKNOWN;
+    }
+  return Status::UNKNOWN;
+}
+
 } /* namespace web */
 } /* namespace syslandscape */

@@ -39,6 +39,10 @@ public:
   std::string body() const;
 
   void append(const std::string &);
+
+  size_t contentLength() const;
+
+  void contentLength(size_t);
   
 private:
 
@@ -49,7 +53,8 @@ private:
   Cookies _cookie;
 
   std::string _body;
-  
+
+  size_t _contentLength;
 };
 
 } /* namespace web */

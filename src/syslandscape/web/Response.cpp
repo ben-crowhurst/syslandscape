@@ -55,5 +55,15 @@ void Response::append(const string &content)
   _body.append(content);
 }
 
+size_t Response::contentLength() const
+{
+  return _contentLength;
+}
+
+void Response::contentLength(size_t value)
+{
+  _contentLength = value;
+}
+
 } /* namespace web */
 } /* namespace syslandscape */
