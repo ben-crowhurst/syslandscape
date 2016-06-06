@@ -4,12 +4,15 @@
 
 using std::string;
 using std::vector;
+using std::shared_ptr;
 using syslandscape::util::StringUtil;
 
 namespace syslandscape {
 namespace web {
 
-WebContext::WebContext() {
+WebContext::WebContext(const string &contextPath)
+  : _contextPath(contextPath)
+{
   _root = new WebPathSegment(nullptr, "/");
   _root->setContent("root");
 }
@@ -22,6 +25,11 @@ WebPathSegment* WebContext::root() {
   return _root;
 }
 
+std::string WebContext::contextPath() const
+{
+  return _contextPath;
+}
+
 string WebContext::match(const std::string &path) {
   if (path == "/") return _root->getContent();
   
@@ -29,14 +37,16 @@ string WebContext::match(const std::string &path) {
   return (segment == nullptr ? "" : segment->getContent());
 }
 
-void WebContext::add(const std::string &path, const std::string &content) {
+void WebContext::add(const std::string &path, std::shared_ptr<WebHandler> handler) {
   if (path == "/") {
-    _root->setContent(content);
+    _root->setContent(path);
+    _handlerList[path] = handler;
     return;
   }
   vector<string> segmentList = StringUtil::split(path, "/");
   WebPathSegment *segment= _root->add(segmentList);
-  segment->setContent(content);
+  segment->setContent(path);
+  _handlerList[path] = handler;  
 }
 
 

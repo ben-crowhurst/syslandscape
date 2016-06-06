@@ -2,11 +2,15 @@
 #define SYSLANDSCAPE_WEB_WEBHANDLER
 
 #include <string>
+#include <memory>
 #include "Request.h"
 #include "Response.h"
 
 namespace syslandscape {
 namespace web {
+
+class WebHandler;
+typedef std::shared_ptr<WebHandler> web_handler_ptr;
 
 class WebHandler
 {

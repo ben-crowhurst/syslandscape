@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+using namespace std;
 using namespace syslandscape::web;
 using syslandscape::tmpl::Data;
 using syslandscape::tmpl::Engine;
@@ -17,15 +18,14 @@ HomeHandler::HomeHandler(std::shared_ptr<Engine> engine)
 HomeHandler::~HomeHandler()
 { }
 
-void
-HomeHandler::handle(HTTPRequest &request, HTTPResponse &response)
+void HomeHandler::handle(shared_ptr<Request> request, shared_ptr<Response> response)
 {
   Data model;
   model["title"] = "Home";
-  model["url"] = request.getUrl();
-  model["method"] = toString(request.getMethod());
+  model["url"] = request->uri();
+  model["method"] = toString(request->method());
   
-  for (auto header: request.headers())
+  for (auto header: request->headers().get())
     {
       Data h;
       h["name"] = header.first;
@@ -34,9 +34,9 @@ HomeHandler::handle(HTTPRequest &request, HTTPResponse &response)
     }
   
   
-  response.setHeader("Content-Type", "text/html");
-  response.setStatus(HTTPStatus::OK);
-  response.setContent(_engine->process("/index.html", model));
+  response->headers().set("Content-Type", "text/html");
+  response->status(Status::OK);
+  response->body(_engine->process("/index.html", model));
 
 }
 

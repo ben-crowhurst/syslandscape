@@ -12,6 +12,10 @@ using syslandscape::web::WebPathSegment;
 
 class WebContextTest : public testing::Test {
 protected:
+
+  WebContextTest()
+    : wc("/")
+  { }
   
   virtual void SetUp() {
     setupWebContext();
@@ -24,6 +28,7 @@ protected:
   WebContext wc;
 
 private:
+  
   void setupWebContext() {
     wc.add("/document/", "document-list");
     wc.add("/document/{id}/title", "document-title");

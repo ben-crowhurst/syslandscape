@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 
+using namespace std;
 using namespace syslandscape::web;
 using syslandscape::tmpl::Data;
 using syslandscape::tmpl::Engine;
@@ -18,15 +19,15 @@ AboutHandler::AboutHandler(std::shared_ptr<Engine> engine)
 AboutHandler::~AboutHandler()
 { }
 
-void
-AboutHandler::handle(HTTPRequest &, HTTPResponse &response)
+void AboutHandler::handle(shared_ptr<Request>, shared_ptr<Response> response)
 {
   Data model;
   model["title"] = "About";
   model["greeting"] = "Hello World";
-  response.setContent(_engine->process("/about.html", model));
-  response.setHeader("Content-Type", "text/html");
-  response.setStatus(HTTPStatus::OK);
+  
+  response->body(_engine->process("/about.html", model));
+  response->headers().set("Content-Type", "text/html");
+  response->status(Status::OK);
 }
 
 } /* namespace web */

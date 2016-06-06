@@ -4,6 +4,7 @@
 #include <memory>
 #include "Types.h"
 #include "Settings.h"
+#include "WebContext.h"
 #include "Handler.h"
 #include "internal/IOServicePool.h"
 #include "internal/ConnectionManager.h"
@@ -26,6 +27,8 @@ public:
   void run();
 
   void stop();
+
+  void add(std::shared_ptr<WebContext>);
   
 private:
 

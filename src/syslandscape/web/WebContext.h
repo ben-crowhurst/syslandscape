@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include "WebPathSegment.h"
-#include "WebHandlerFactory.h"
+#include "WebHandler.h"
 
 namespace syslandscape {
 namespace web {
@@ -13,35 +13,29 @@ namespace web {
 class WebContext
 {
 public:
-  WebContext();
+  WebContext(const std::string &);
+
+  WebContext() = delete;
+
   virtual ~WebContext();
 
   WebPathSegment* root();
 
+  std::string contextPath() const;
+  
   std::string match(const std::string &);
-
-  void add(const std::string &, const std::string &);
-
-  void setWebHandlerFactory(std::shared_ptr<WebHandlerFactory>);
-  std::shared_ptr<WebHandlerFactory> getWebHandlerFactory();
+  
+  void add(const std::string &, std::shared_ptr<WebHandler>);
   
 private:
 
   WebPathSegment *_root;
-  std::shared_ptr<WebHandlerFactory> _factory;
+
+  std::string _contextPath;
+  
+  std::map<std::string, std::shared_ptr<WebHandler>> _handlerList; 
+  
 };
-
-inline void
-WebContext::setWebHandlerFactory(std::shared_ptr<WebHandlerFactory> factory)
-{
-  _factory = factory;
-}
-
-inline std::shared_ptr<WebHandlerFactory>
-WebContext::getWebHandlerFactory()
-{
-  return _factory;
-}
 
 
 } /* web */

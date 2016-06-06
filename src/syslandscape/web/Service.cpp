@@ -25,6 +25,12 @@ Service::~Service()
 
 }
 
+void Service::add(std::shared_ptr<WebContext> webContext)
+{
+  _handler->add(webContext);
+}
+
+
 void Service::run()
 {
   doAccept();

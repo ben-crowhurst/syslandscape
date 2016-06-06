@@ -1,52 +1,64 @@
 #include <iostream>
-#include <string>
 #include <memory>
-#include <syslandscape/web/HTTPServer.h>
+#include <syslandscape/web/Settings.h>
+#include <syslandscape/web/Service.h>
 #include <syslandscape/web/WebContext.h>
 #include <syslandscape/tmpl/Engine.h>
 #include <syslandscape/tmpl/DirectoryStorage.h>
 
 #include "AboutHandler.h"
 #include "HomeHandler.h"
-#include "HandlerFactory.h"
 
-using std::string;
-using syslandscape::web::HTTPServer;
-using syslandscape::web::WebContext;
 using syslandscape::tmpl::Engine;
 using syslandscape::tmpl::Storage;
 using syslandscape::tmpl::DirectoryStorage;
+using namespace syslandscape::web;
 using namespace syslandscape::example::web;
 using namespace std;
 
-std::shared_ptr<Engine> setupTemplateEngine()
+shared_ptr<WebContext> getWebApp1()
 {
-  std::shared_ptr<Engine> engine = std::make_shared<Engine>();
-  std::shared_ptr<Storage> storage = std::make_shared<DirectoryStorage>("www");
-  engine->setStorage(storage);
+  std::shared_ptr<Engine> tmpl = std::make_shared<Engine>();
+  tmpl->setStorage(std::make_shared<DirectoryStorage>("www/webapp1"));
+  
+  shared_ptr<WebContext> wc = make_shared<WebContext>("/webapp1");
+  shared_ptr<WebHandler> home = make_shared<HomeHandler>(tmpl);
+  shared_ptr<WebHandler> about = make_shared<AboutHandler>(tmpl);
 
-  return engine;
+  wc->add("/", home);
+  wc->add("/index.html", home);
+  wc->add("/about.html", about);
+
+  return wc;
+}
+
+shared_ptr<WebContext> getWebApp2()
+{
+  std::shared_ptr<Engine> tmpl = std::make_shared<Engine>();
+  tmpl->setStorage(std::make_shared<DirectoryStorage>("www/webapp2"));
+  
+  shared_ptr<WebContext> wc = make_shared<WebContext>("/app2");
+  shared_ptr<WebHandler> home = make_shared<HomeHandler>(tmpl);
+  shared_ptr<WebHandler> about = make_shared<AboutHandler>(tmpl);
+
+  wc->add("/", home);
+  wc->add("/index.html", home);
+  wc->add("/about.html", about);
+
+  return wc;
 }
 
 int main()
-{
-  auto wc = std::make_shared<WebContext>();
-  wc->add("/", "home");
-  //  wc->add("/*", "home");  
-  wc->add("/index.html", "home");
-  wc->add("/about.html", "about");
-  wc->setWebHandlerFactory(std::make_shared<HandlerFactory>(setupTemplateEngine()));
-  
-  std::cout << "RUN" << std::endl;
-  try {
-    HTTPServer s("0.0.0.0", "8080");
-    s.setWebContext(wc);
-    s.run();   
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << "exception: " << e.what() << "\n";
-  }
+{  
+  shared_ptr<Settings> settings = make_shared<Settings>();
+  settings->address("0.0.0.0");
+  Service service(settings);
 
+  
+  service.add(getWebApp1());
+  service.add(getWebApp2());
+  
+  service.run();
+  
   return 0;
 }
