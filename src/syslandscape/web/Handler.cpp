@@ -1,7 +1,5 @@
 #include "Handler.h"
 
-#include <iostream>
-
 namespace syslandscape {
 namespace web {
 
@@ -15,19 +13,11 @@ Handler::~Handler()
 
 }
 
-void Handler::handle(request_ptr request, response_ptr response)
+void Handler::handle(request_ptr, response_ptr response)
 {
-  std::cout << "-----------------------" << std::endl;
-  std::cout << toString(request->method()) << std::endl;
-  std::cout << request->uri() << std::endl;
-  for (auto header: request->headers().get())
-    {
-      std::cout << "\t" <<  header.first << ":" << header.second << std::endl;
-    }
-  std::cout << request->body() << std::endl;
-
-  response->status(Status::OK);
-  response->body("Hello");
+  response->headers().set(HTTP_HEADER_CONTENT_TYPE, "text/html; charset=utf-8");  
+  response->status(Status::NOT_FOUND);
+  response->body("<html><head><title>Page Not Found</title><body><h1>Page Not Found</h1></body></html>");
 }
 
 } /* namespace web */

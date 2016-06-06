@@ -98,6 +98,39 @@ void HttpRequestUtil::onData(error_code error, size_t transferred)
     }
 }
 
+void HttpRequestUtil::parseHost()
+{
+  const Headers &headers = _connection._request->headers();
+
+  if (!headers.has(HTTP_HEADER_HOST))
+    {
+      _connection._request->host("");
+      _connection._request->port(80);      
+    }
+  else
+    {
+      string host = headers.get(HTTP_HEADER_HOST);
+      string::size_type pos = host.find(":");
+      if (pos == string::npos)
+        {
+          _connection._request->host(host);
+          _connection._request->port(80);          
+        }
+      else
+        {
+          _connection._request->host(host.substr(0, pos));          
+          try
+            {
+              _connection._request->port(std::stoi(host.substr(pos + 1, host.size())));  
+            }
+          catch (...)
+            {
+              _connection._request->port(80);
+            }
+        }
+    } 
+}
+
 void HttpRequestUtil::parseCookies(const string &content)
 {
   vector<string> cookieList = StringUtil::split(content, ";");
@@ -113,21 +146,23 @@ void HttpRequestUtil::parseCookies(const string &content)
     }    
 }
 
-
 void HttpRequestUtil::onBody(const char *data, size_t size)
 {
   _connection._request->body(std::string(data, size));
 }
+
 int HttpRequestUtil::onBodyCB(http_parser * parser, const char *data, size_t size)
 {
   HttpRequestUtil* instance = static_cast<HttpRequestUtil *>(parser->data);
   instance->onBody(data, size);
   return 0;
 }
+
 void HttpRequestUtil::onMessageComplete()
 {
   _connection.onRequest(Status::OK, "");  
 }
+
 int HttpRequestUtil::onMessageCompleteCB(http_parser * parser)
 {
   HttpRequestUtil* instance = static_cast<HttpRequestUtil *>(parser->data);
@@ -138,7 +173,9 @@ int HttpRequestUtil::onMessageCompleteCB(http_parser * parser)
 void HttpRequestUtil::onHeadersComplete()
 {
   _connection._request->contentLength(_parser.content_length);
+  parseHost();
 }
+
 int HttpRequestUtil::onHeadersCompleteCB(http_parser * parser)
 {
   HttpRequestUtil* instance = static_cast<HttpRequestUtil *>(parser->data);

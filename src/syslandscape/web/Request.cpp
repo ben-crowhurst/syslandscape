@@ -71,5 +71,25 @@ void Request::body(const string &uri)
   _uri = uri;
 }
 
+std::string Request::host() const
+{
+  return _host;
+}
+  
+void Request::host(const string &value)
+{
+  _host = value;
+}
+
+int Request::port() const
+{
+  return _port;
+}
+  
+void Request::port(int value)
+{
+  _port = value;
+}
+
 } /* namespace web */
 } /* namespace syslandscape */

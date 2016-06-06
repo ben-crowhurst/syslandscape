@@ -50,6 +50,8 @@ private:
   void onData(boost::system::error_code, size_t);
 
   void parseCookies(const std::string &);
+
+  void parseHost();
   
   void onBody(const char *, size_t);
   static int onBodyCB(http_parser *, const char *, size_t);

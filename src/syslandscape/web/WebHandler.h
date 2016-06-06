@@ -13,8 +13,8 @@ class WebHandler
 public:
 
   virtual ~WebHandler();
-  
-  virtual void handle(Request &, Response &) = 0;
+
+  virtual void handle(std::shared_ptr<Request>, std::shared_ptr<Response>) = 0;
 
 };
 

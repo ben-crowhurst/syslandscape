@@ -45,7 +45,27 @@ public:
 
   std::string body() const;
 
-  void body(const std::string &);  
+  void body(const std::string &);
+
+  /**
+   * Returns request's host.
+   *
+   * Value is parsed from Host header. In case of missing header, an
+   * empty string is used.
+   */
+  std::string host() const;
+  
+  void host(const std::string &);
+
+  /**
+   * Returns port of request's #host().
+   *
+   * If Host header is missing, or port is missing, by default value
+   * of 80 is used. 
+   */
+  int port() const;
+  
+  void port(int);
   
 private:
 
@@ -61,6 +81,9 @@ private:
 
   std::string _body;
 
+  std::string _host;
+
+  int _port;
 };
 
 } /* namespace web */
