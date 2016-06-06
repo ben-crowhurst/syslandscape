@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "Request.h"
+#include "Response.h"
 #include "WebPathSegment.h"
 #include "WebHandler.h"
 
@@ -22,11 +24,11 @@ public:
   WebPathSegment* root();
 
   std::string contextPath() const;
-  
-  std::string match(const std::string &);
-  
+    
   void add(const std::string &, std::shared_ptr<WebHandler>);
-  
+
+  void handle(std::shared_ptr<Request>, std::shared_ptr<Response>);
+
 private:
 
   WebPathSegment *_root;
@@ -34,7 +36,9 @@ private:
   std::string _contextPath;
   
   std::map<std::string, std::shared_ptr<WebHandler>> _handlerList; 
-  
+
+  std::string match(const std::string &);
+
 };
 
 

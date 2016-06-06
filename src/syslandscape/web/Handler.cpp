@@ -25,13 +25,14 @@ void Handler::handle(shared_ptr<Request> request, shared_ptr<Response> response)
   shared_ptr<WebContext> wc = getWebContext(request->uri());
   if (wc)
     {
-      std::string path = request->uri().substr(wc->contextPath().size(), request->uri().size());
-      std::cout << "WWWWWWWWWWWWW "  << wc->match(path) << std::endl;
+      wc->handle(request, response);
     }
-  response->headers().set(HTTP_HEADER_CONTENT_TYPE, "text/html; charset=utf-8");  
-  response->status(Status::NOT_FOUND);
-  response->body("<html><head><title>Page Not Found</title><body><h1>Page Not Found</h1></body></html>");
-
+  else
+    {
+      response->headers().set(HTTP_HEADER_CONTENT_TYPE, "text/html; charset=utf-8");  
+      response->status(Status::NOT_FOUND);
+      response->body("<html><head><title>Page Not Found</title><body><h1>Page Not Found</h1></body></html>");
+    }
 }
 
 void Handler::add(shared_ptr<WebContext> webContext)
