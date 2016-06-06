@@ -9,6 +9,13 @@
 namespace syslandscape {
 namespace web {
 
+/**
+ * Factory for creating handlers.
+ *
+ * Handlers are created and destroyed during request / response 
+ * lifecycle.
+ *
+ */
 class WebHandlerFactory
 {
 public:
