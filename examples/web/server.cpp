@@ -52,6 +52,9 @@ int main()
 {  
   shared_ptr<Settings> settings = make_shared<Settings>();
   settings->address("0.0.0.0");
+  settings->ssl(true);
+  settings->sslCertificate("ssl/server.crt");
+  settings->sslPrivateKey("ssl/server.key");
   Service service(settings);
 
   

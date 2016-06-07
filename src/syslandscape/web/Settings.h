@@ -57,6 +57,18 @@ public:
   uint16_t keepAliveTimeout() const;
 
   void keepAlivetimeout(uint16_t);
+
+  void ssl(bool);
+
+  bool ssl() const;
+
+  void sslCertificate(const std::string &);
+
+  std::string sslCertificate() const;
+
+  void sslPrivateKey(const std::string &);
+
+  std::string sslPrivateKey() const;
   
 private:
 
@@ -92,7 +104,13 @@ private:
    * request before closing the connection. Once a request has been 
    * received, the timeout value specified by the Timeout directive 
    * applies. */
-  uint16_t _keepAliveTimeout = 15;  
+  uint16_t _keepAliveTimeout = 15;
+
+  bool _ssl;
+
+  std::string _sslCertificate;
+
+  std::string _sslPrivateKey;
 };
 
 } /* web */

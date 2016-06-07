@@ -16,6 +16,8 @@ set(SOURCES
   Service.cpp
   Settings.cpp
   Connection.cpp
+  Connector.cpp
+  Socket.cpp
   internal/IOServicePool.cpp
   internal/ConnectionManager.cpp
   internal/HttpRequestUtil.cpp
@@ -32,3 +34,4 @@ target_link_libraries(${SYSLANDSCAPE_WEB} ${SYSLANDSCAPE})
 target_link_libraries(${SYSLANDSCAPE_WEB} ${SYSLANDSCAPE_UTIL})
 target_link_libraries(${SYSLANDSCAPE_WEB} ${SYSLANDSCAPE_TMPL})
 target_link_libraries(${SYSLANDSCAPE_WEB} ${Boost_LIBRARIES})
+target_link_libraries(${SYSLANDSCAPE_WEB} ${OPENSSL_LIBRARIES})

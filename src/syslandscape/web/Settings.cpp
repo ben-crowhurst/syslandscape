@@ -116,6 +116,35 @@ void Settings::keepAlivetimeout(uint16_t value)
   _keepAliveTimeout = value;
 }
 
+void Settings::ssl(bool value)
+{
+  _ssl = value;
+}
+
+bool Settings::ssl() const
+{
+  return _ssl;
+}
+
+void Settings::sslCertificate(const string &value)
+{
+  _sslCertificate = value;
+}
+
+string Settings::sslCertificate() const
+{
+  return _sslCertificate;
+}
+
+void Settings::sslPrivateKey(const string &value)
+{
+  _sslPrivateKey = value;
+}
+
+string Settings::sslPrivateKey() const
+{
+  return _sslPrivateKey;
+}
 
 } /* web */
 } /* engine  */

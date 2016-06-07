@@ -2,6 +2,7 @@
 #define SYSLANDSCAPE_WEB_SERVICE
 
 #include <memory>
+#include <boost/asio/ssl.hpp>
 #include "Types.h"
 #include "Settings.h"
 #include "WebContext.h"
