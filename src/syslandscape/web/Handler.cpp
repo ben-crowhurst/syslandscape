@@ -22,16 +22,22 @@ Handler::~Handler()
 
 void Handler::handle(shared_ptr<Request> request, shared_ptr<Response> response)
 {
-  shared_ptr<WebContext> wc = getWebContext(request->uri());
-  if (wc)
+  try
     {
-      wc->handle(request, response);
+      shared_ptr<WebContext> wc = getWebContext(request->uri());
+      if (wc)
+        {
+          wc->handle(request, response);
+        }
+      else
+        {
+          error(Status::NOT_FOUND, response);
+        }
     }
-  else
+  catch (const std::exception &e)
     {
-      response->headers().set(HTTP_HEADER_CONTENT_TYPE, "text/html; charset=utf-8");  
-      response->status(Status::NOT_FOUND);
-      response->body("<html><head><title>Page Not Found</title><body><h1>Page Not Found</h1></body></html>");
+      error(Status::INTERNAL_SERVER_ERROR, response);      
+      std::cout << "[Handler] Exception: " << e.what() << std::endl;
     }
 }
 
@@ -55,6 +61,22 @@ shared_ptr<WebContext> Handler::getWebContext(const string &uri)
     }
 
   return nullptr;
+}
+
+void Handler::error(Status status, std::shared_ptr<Response> response)
+{
+  response->headers().set(HTTP_HEADER_CONTENT_TYPE, "text/html; charset=utf-8");
+  response->status(status);
+  if (Status::NOT_FOUND == status)
+    { 
+      response->body("<html><head><title>Page Not Found</title><body><h1>Page Not Found</h1></body></html>");
+      response->headers().set(HTTP_HEADER_CONTENT_LENGTH, std::to_string(response->body().size()));
+    }
+  if (Status::INTERNAL_SERVER_ERROR == status)
+    { 
+      response->body("<html><head><title>Internal Server Error</title><body><h1>Internal Server Error</h1></body></html>");
+      response->headers().set(HTTP_HEADER_CONTENT_LENGTH, std::to_string(response->body().size()));
+    }  
 }
 
 } /* namespace web */

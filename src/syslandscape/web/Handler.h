@@ -38,6 +38,8 @@ private:
 
   std::shared_ptr<WebContext> getWebContext(const std::string &);
 
+  void error(Status, std::shared_ptr<Response>);
+  
 };
 
 } /* namespace web */

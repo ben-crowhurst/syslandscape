@@ -68,7 +68,6 @@ void Service::setup()
 
 void Service::doAccept()
 {
-
   socket_ptr s = make_shared<socket>(_ioServicePool.get());
   _acceptor.async_accept
     (

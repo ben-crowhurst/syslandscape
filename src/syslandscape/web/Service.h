@@ -12,6 +12,9 @@
 namespace syslandscape {
 namespace web {
 
+class Service;
+typedef std::shared_ptr<Service> service_ptr;
+
 class Service
 {
 public:

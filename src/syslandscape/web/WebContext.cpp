@@ -51,7 +51,17 @@ void WebContext::add(const std::string &path, std::shared_ptr<WebHandler> handle
 
 void WebContext::handle(std::shared_ptr<Request> request, std::shared_ptr<Response> response)
 {
-  string path = request->uri().substr(contextPath().size(), request->uri().size());
+  string path;
+  /** Case where both are / */
+  if (request->uri() == contextPath())
+    {
+      path = contextPath();
+    }
+  else
+    {
+      path = request->uri().substr(contextPath().size(), request->uri().size());
+    }
+  
   string handlerId = match(path);
 
   if (!handlerId.empty())

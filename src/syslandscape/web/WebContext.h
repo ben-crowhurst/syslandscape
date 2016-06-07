@@ -29,6 +29,10 @@ public:
 
   void handle(std::shared_ptr<Request>, std::shared_ptr<Response>);
 
+protected:
+
+  std::string match(const std::string &);
+
 private:
 
   WebPathSegment *_root;
@@ -36,8 +40,6 @@ private:
   std::string _contextPath;
   
   std::map<std::string, std::shared_ptr<WebHandler>> _handlerList; 
-
-  std::string match(const std::string &);
 
 };
 
