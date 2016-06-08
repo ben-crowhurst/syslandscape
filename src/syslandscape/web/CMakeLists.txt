@@ -16,10 +16,12 @@ set(SOURCES
   Service.cpp
   Settings.cpp
   Connection.cpp
-  Connector.cpp
-  Socket.cpp
   internal/IOServicePool.cpp
   internal/ConnectionManager.cpp
+  internal/Socket.cpp
+  internal/TCPSocket.cpp
+  internal/SSLSocket.cpp
+  internal/Acceptor.cpp
   internal/HttpRequestUtil.cpp
   internal/HttpResponseUtil.cpp
   internal/ClientRequestUtil.cpp
