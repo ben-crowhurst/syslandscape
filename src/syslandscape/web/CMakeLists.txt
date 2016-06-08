@@ -22,6 +22,8 @@ set(SOURCES
   internal/TCPSocket.cpp
   internal/SSLSocket.cpp
   internal/Acceptor.cpp
+  internal/TCPAcceptor.cpp
+  internal/SSLAcceptor.cpp
   internal/HttpRequestUtil.cpp
   internal/HttpResponseUtil.cpp
   internal/ClientRequestUtil.cpp

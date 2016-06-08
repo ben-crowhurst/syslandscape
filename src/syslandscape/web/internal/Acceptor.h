@@ -1,7 +1,6 @@
 #ifndef SYSLANDSCAPE_WEB_INTERNAL_ACCEPTOR
 #define SYSLANDSCAPE_WEB_INTERNAL_ACCEPTOR
 
-#include <string>
 #include <memory>
 #include <functional>
 #include "../Settings.h"
@@ -18,7 +17,9 @@ public:
 
   Acceptor() = delete;
   
-  Acceptor(std::shared_ptr<Settings>, IOServicePool &, const std::function<void (std::shared_ptr<Socket>)> &);
+  Acceptor(std::shared_ptr<Settings>,
+           IOServicePool &,
+           const std::function<void (std::shared_ptr<Socket>, const boost::system::error_code &)> &);
 
   Acceptor(const Acceptor&) = delete;
   
@@ -31,11 +32,14 @@ public:
 protected:
 
   std::shared_ptr<Settings> _settings;
-
+  
   IOServicePool &_ioServicePool;
 
-  const std::function<void (std::shared_ptr<Socket>)> &_callback;
-  
+  boost::asio::ip::tcp::acceptor _acceptor;
+
+  const std::function<void (std::shared_ptr<Socket>, const boost::system::error_code &)> &_callback;
+
+  void onAccept(std::shared_ptr<Socket>, const boost::system::error_code &);
 };
 
 } /* internal */
