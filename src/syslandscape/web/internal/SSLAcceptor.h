@@ -30,7 +30,7 @@ public:
 private:
 
   boost::asio::ssl::context _context;
-  
+
 };
 
 } /* internal */
