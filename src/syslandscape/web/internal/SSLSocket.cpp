@@ -16,6 +16,11 @@ boost::asio::ip::tcp::socket & SSLSocket::native()
   return _socket.next_layer();
 }
 
+boost::asio::ssl::stream<boost::asio::ip::tcp::socket> & SSLSocket::socket()
+{
+  return _socket;
+}
+
 } /* internal */
 } /* web */
 } /* syslandscape  */

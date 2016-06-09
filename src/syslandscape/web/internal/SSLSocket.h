@@ -25,6 +25,8 @@ public:
 
   virtual boost::asio::ip::tcp::socket &native() override;
 
+  boost::asio::ssl::stream<boost::asio::ip::tcp::socket> & socket();
+  
 private:
 
   boost::asio::ssl::stream<boost::asio::ip::tcp::socket> _socket;

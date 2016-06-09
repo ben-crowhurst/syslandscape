@@ -146,5 +146,16 @@ string Settings::sslPrivateKey() const
   return _sslPrivateKey;
 }
 
+uint16_t Settings::sslHandshakeTimeout() const
+{
+  return _sslHandshakeTimeout;
+}
+
+void Settings::sslHandshakeTimeout(uint16_t value)
+{
+  _sslHandshakeTimeout = value;
+}
+
+
 } /* web */
 } /* engine  */

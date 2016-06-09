@@ -3,6 +3,7 @@
 
 #include <boost/asio/ssl.hpp>
 #include "Acceptor.h"
+#include "SSLSocket.h"
 
 namespace syslandscape {
 namespace web {
@@ -31,6 +32,12 @@ private:
 
   boost::asio::ssl::context _context;
 
+  void handshake(std::shared_ptr<SSLSocket>);
+
+  void onHandshakeTimeout(std::shared_ptr<SSLSocket>, boost::asio::deadline_timer *, const boost::system::error_code &);
+
+  void onHandshake(std::shared_ptr<SSLSocket>, boost::asio::deadline_timer *, const boost::system::error_code &);
+  
 };
 
 } /* internal */

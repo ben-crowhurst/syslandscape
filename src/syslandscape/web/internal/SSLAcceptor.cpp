@@ -26,14 +26,46 @@ SSLAcceptor::~SSLAcceptor()
 
 void SSLAcceptor::accept()
 {
-  std::shared_ptr<Socket> socket = std::make_shared<SSLSocket>(_ioServicePool.get(), _context);
+  std::shared_ptr<SSLSocket> socket = std::make_shared<SSLSocket>(_ioServicePool.get(), _context);
   _acceptor.async_accept(
                          socket->native(),
                          [this, socket] (const boost::system::error_code &error)
                          {
-                           onAccept(socket, error);
+                           /** Errors... just notify  */
+                           if (error)
+                             {
+                               onAccept(socket, error);
+                               return;
+                             }
+                           handshake(socket);
                          });
 }
+
+void SSLAcceptor::handshake(std::shared_ptr<SSLSocket> socket)
+{
+  boost::asio::deadline_timer *timer = new boost::asio::deadline_timer(_ioServicePool.get());
+  if (_settings->sslHandshakeTimeout() > 0)
+    {
+      timer->expires_from_now(boost::posix_time::seconds(_settings->sslHandshakeTimeout()));
+      timer->async_wait([this, socket, timer] (const boost::system::error_code &error) { onHandshakeTimeout(socket, timer, error); } );
+    }
+  socket->socket().async_handshake(boost::asio::ssl::stream_base::server, [this, socket, timer] (const boost::system::error_code &error) { onHandshake(socket, timer, error); });
+}
+
+void SSLAcceptor::onHandshakeTimeout(std::shared_ptr<SSLSocket> socket, boost::asio::deadline_timer *timer, const boost::system::error_code &error)
+{
+  timer->cancel();
+  delete timer;
+  onAccept(socket, error);
+}
+
+void SSLAcceptor::onHandshake(std::shared_ptr<SSLSocket> socket, boost::asio::deadline_timer *timer, const boost::system::error_code &error)
+{
+  timer->cancel();
+  delete timer;
+  onAccept(socket, error);
+}
+
 
 } /* internal */
 } /* web */

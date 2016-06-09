@@ -69,6 +69,10 @@ public:
   void sslPrivateKey(const std::string &);
 
   std::string sslPrivateKey() const;
+
+  uint16_t sslHandshakeTimeout() const;
+
+  void sslHandshakeTimeout(uint16_t);
   
 private:
 
@@ -111,6 +115,8 @@ private:
   std::string _sslCertificate;
 
   std::string _sslPrivateKey;
+
+  uint16_t _sslHandshakeTimeout = 3;
 };
 
 } /* web */

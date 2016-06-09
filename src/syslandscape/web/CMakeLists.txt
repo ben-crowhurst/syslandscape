@@ -14,8 +14,10 @@ set(SOURCES
   Handler.cpp
   Client.cpp
   Service.cpp
+  Service2.cpp
   Settings.cpp
   Connection.cpp
+  Connector.cpp
   internal/IOServicePool.cpp
   internal/ConnectionManager.cpp
   internal/Socket.cpp
