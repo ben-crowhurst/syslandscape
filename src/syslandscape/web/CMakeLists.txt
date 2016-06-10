@@ -14,21 +14,12 @@ set(SOURCES
   Handler.cpp
   Client.cpp
   Service.cpp
-  Service2.cpp
   Settings.cpp
   Connection.cpp
   Connector.cpp
   internal/IOServicePool.cpp
   internal/ConnectionManager.cpp
   internal/Socket.cpp
-  internal/TCPSocket.cpp
-  internal/SSLSocket.cpp
-  internal/Acceptor.cpp
-  internal/TCPAcceptor.cpp
-  internal/SSLAcceptor.cpp
-  internal/HttpRequestUtil.cpp
-  internal/HttpResponseUtil.cpp
-  internal/ClientRequestUtil.cpp
   internal/ClientResponseUtil.cpp
   )
 

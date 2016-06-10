@@ -28,11 +28,8 @@ public:
 private:
 
   typedef std::shared_ptr<boost::asio::io_service> IOServicePtr;
-  typedef std::shared_ptr<boost::asio::io_service::work> IOWorkPtr;
   
   std::vector<IOServicePtr> _ioServices;
-  
-  std::vector<IOWorkPtr> _ioWork;
   
   std::size_t _next = 0;
   

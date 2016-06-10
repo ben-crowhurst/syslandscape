@@ -1,7 +1,6 @@
 #include "IOServicePool.h"
 
 #include <thread>
-#include "../WebException.h"
 
 using std::size_t;
 using std::vector;
@@ -9,7 +8,6 @@ using std::thread;
 using std::shared_ptr;
 using std::bind;
 using std::make_shared;
-using syslandscape::web::WebException;
 
 namespace asio = boost::asio;
 
@@ -25,11 +23,8 @@ IOServicePool::IOServicePool(size_t size)
 
  for (size_t i = 0; i < size; ++i)
    {
-     IOServicePtr ioService = make_shared<asio::io_service>();
-     IOWorkPtr ioWork = make_shared<asio::io_service::work>(*ioService);
-     
+     IOServicePtr ioService = make_shared<asio::io_service>();     
      _ioServices.push_back(ioService);
-     _ioWork.push_back(ioWork);
   }
 }
 
@@ -44,7 +39,7 @@ void IOServicePool::run()
 
   // Wait for all threads in the pool to exit.
   for (std::size_t i = 0; i < threads.size(); ++i)
-    threads[i]->join();
+    threads[i]->join();  
 }
 
 void IOServicePool::stop()

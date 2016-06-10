@@ -3,8 +3,8 @@ set(SOURCES
   HomeHandler.cpp
   )
 
-SET(EXAMPLE_NAME server)
-add_executable(${EXAMPLE_NAME} server.cpp ${SOURCES})
+SET(EXAMPLE_NAME server2)
+add_executable(${EXAMPLE_NAME} server2.cpp ${SOURCES})
 target_link_libraries(${EXAMPLE_NAME} -lasan -lubsan)
 target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE})
 target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_TMPL})
@@ -26,11 +26,3 @@ target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_UTIL})
 target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_WEB})
 target_link_libraries(${EXAMPLE_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
-SET(EXAMPLE_NAME server2)
-add_executable(${EXAMPLE_NAME} server2.cpp ${SOURCES})
-target_link_libraries(${EXAMPLE_NAME} -lasan -lubsan)
-target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE})
-target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_TMPL})
-target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_UTIL})
-target_link_libraries(${EXAMPLE_NAME} ${SYSLANDSCAPE_WEB})
-target_link_libraries(${EXAMPLE_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})

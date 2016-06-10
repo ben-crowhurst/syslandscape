@@ -45,24 +45,24 @@ bool Settings::noDelay() const
   return _noDelay;
 }
 
-void Settings::workerThreads(uint16_t value)
+void Settings::connectorThreads(uint16_t value)
 {
-  _workerThreads = value;
+  _connectorThreads = value;
 }
 
-uint16_t Settings::workerThreads() const
+uint16_t Settings::connectorThreads() const
 {
-  return _workerThreads;
+  return _connectorThreads;
 }
 
-void Settings::maxPendingConnections(uint16_t value)
+void Settings::connectorMaxConnections(uint16_t value)
 {
-  _maxPendingConnections = value;
+  _connectorMaxConnections = value;
 }
 
-uint16_t Settings::maxPendingConnections() const
+uint16_t Settings::connectorMaxConnections()const
 {
-  return _maxPendingConnections;
+  return _connectorMaxConnections;
 }
 
 void Settings::receiveBufferSize(uint16_t value)

@@ -30,13 +30,21 @@ public:
 
   void noDelay(bool);
 
-  void workerThreads(uint16_t);
+  void connectorThreads(uint16_t);
 
-  uint16_t workerThreads() const;
+  /**
+   * Threads that Connector should use to accept and setup new 
+   * connections.
+   */
+  uint16_t connectorThreads() const;
+
+  /**
+   * Maximum number of new tcp connections that are waiting Connector 
+   * to accept and setup them. 
+   */
+  void connectorMaxConnections(uint16_t);
   
-  void maxPendingConnections(uint16_t);
-  
-  uint16_t maxPendingConnections() const;
+  uint16_t connectorMaxConnections() const;
   
   void receiveBufferSize(uint16_t);
 
@@ -85,9 +93,9 @@ private:
   /** Set tcp::no_delay option to socket. */
   bool _noDelay = true;
 
-  uint16_t _workerThreads = 10;
+  uint16_t _connectorThreads = 10;
   
-  uint16_t _maxPendingConnections = 30;
+  uint16_t _connectorMaxConnections = 30;
   
   uint16_t _receiveBufferSize = 8192;
 
